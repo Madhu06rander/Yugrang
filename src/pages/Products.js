@@ -10,25 +10,56 @@ import menKurta1 from '../assets/images/MEN KURTA/floral.jpg';
 import menKurta2 from '../assets/images/MEN KURTA/mandla.jpg';
 import menKurta3 from '../assets/images/MEN KURTA/floral (2).jpg';
 import menKurta4 from '../assets/images/MEN KURTA/mandla (2).jpg';
+import menKurta5 from '../assets/images/MEN KURTA/floral (3).jpg';
+import menKurta6 from '../assets/images/MEN KURTA/floral (4).jpg';
+import menKurta7 from '../assets/images/MEN KURTA/floral (5).jpg';
+import menKurta8 from '../assets/images/MEN KURTA/floral (6).jpg';
+import menKurta9 from '../assets/images/MEN KURTA/floral (7).jpg';
+import menKurta10 from '../assets/images/MEN KURTA/floral (8).jpg';
+import menKurta11 from '../assets/images/MEN KURTA/Kolar Border mandala.jpg';
+import menKurta12 from '../assets/images/MEN KURTA/kolar mandala (1).jpg';
+import menKurta13 from '../assets/images/MEN KURTA/mandla (3).jpg';
+import menKurta14 from '../assets/images/MEN KURTA/mandla (4).jpg';
 
 // MEN SHIRTS IMAGES
 import menShirt1 from '../assets/images/MEN SHIRTS/leaves.jpg';
 import menShirt2 from '../assets/images/MEN SHIRTS/one side leave.jpg';
 import menShirt3 from '../assets/images/MEN SHIRTS/rounded.jpg';
 import menShirt4 from '../assets/images/MEN SHIRTS/time fly.jpg';
+import menShirt5 from '../assets/images/MEN SHIRTS/Women folaral.jpg';
+import menShirt6 from '../assets/images/MEN SHIRTS/Flower pint.jpg';
+import menShirt7 from '../assets/images/MEN SHIRTS/Leave Fall.jpg';
+import menShirt8 from '../assets/images/MEN SHIRTS/Mashroom print.jpg';
+import menShirt9 from '../assets/images/MEN SHIRTS/spotted Flower.jpg';
+import menShirt10 from '../assets/images/MEN SHIRTS/Spring Mood.jpg';
 
 // MENS T-SHIRT IMAGES
 import mensTshirt1 from '../assets/images/MENS\'S T-SHIRT/introvert person.jpg';
 import mensTshirt2 from '../assets/images/MENS\'S T-SHIRT/leaf deign.jpg';
+import mensTshirt3 from '../assets/images/MENS\'S T-SHIRT/11_11 Sun Moon.jpg';
+import mensTshirt4 from '../assets/images/MENS\'S T-SHIRT/Abstract Sun And Moon.jpg';
+import mensTshirt5 from '../assets/images/MENS\'S T-SHIRT/Boho Tribal.jpg';
+import mensTshirt6 from '../assets/images/MENS\'S T-SHIRT/Devoite Mandala.jpg';
+import mensTshirt7 from '../assets/images/MENS\'S T-SHIRT/Guitar Print.jpg';
+import mensTshirt8 from '../assets/images/MENS\'S T-SHIRT/Intricate Geometric.jpg';
+import mensTshirt9 from '../assets/images/MENS\'S T-SHIRT/Ocean print.jpg';
 
 // WOMEN KURTI IMAGES
 import womenKurti1 from '../assets/images/WOMEN KURTI/boarder mandala.jpg';
 import womenKurti2 from '../assets/images/WOMEN KURTI/hand painted.jpg';
+import womenKurti3 from '../assets/images/WOMEN KURTI/Floral print.jpg';
+import womenKurti4 from '../assets/images/WOMEN KURTI/Lotus print.jpg';
+import womenKurti5 from '../assets/images/WOMEN KURTI/Madhubani Painting.jpg';
+import womenKurti6 from '../assets/images/WOMEN KURTI/Mandala seeleves.jpg';
 
 // WOMEN SHIRT IMAGES
 import womenShirt1 from '../assets/images/WOMEN SHIRT/animal obssed.jpg';
 import womenShirt2 from '../assets/images/WOMEN SHIRT/cat path.jpg';
 import womenShirt3 from '../assets/images/WOMEN SHIRT/floral.jpg';
+import womenShirt4 from '../assets/images/WOMEN SHIRT/Bittersweet.jpg';
+import womenShirt5 from '../assets/images/WOMEN SHIRT/Hand paint face print.jpg';
+import womenShirt6 from '../assets/images/WOMEN SHIRT/Hummingbird _ Print.jpg';
+import womenShirt7 from '../assets/images/WOMEN SHIRT/nature obseed.jpg';
 
 // HANDKERCHIEF IMAGES
 import handkerchief1 from '../assets/images/handkerchief/Bike obssed.jpg';
@@ -56,16 +87,27 @@ import hoodie5 from '../assets/images/Hoodie/Mine Forever.jpg';
 import hoodie6 from '../assets/images/Hoodie/Panda.jpg';
 import hoodie7 from '../assets/images/Hoodie/Sun & Moon.jpg';
 
+// WOMEN TISHIRT IMAGES
+import womenTshirt1 from '../assets/images/WOMEN TISHIRT/Animal,Floral,Geometric..jpg';
+import womenTshirt2 from '../assets/images/WOMEN TISHIRT/Animal,Tribal.jpg';
+import womenTshirt3 from '../assets/images/WOMEN TISHIRT/download.jpg';
+import womenTshirt4 from '../assets/images/WOMEN TISHIRT/Panda Dream.jpg';
+import womenTshirt5 from '../assets/images/WOMEN TISHIRT/Spiritual Goddess.jpg';
+import womenTshirt6 from '../assets/images/WOMEN TISHIRT/Sun and Moon.jpg';
+import womenTshirt7 from '../assets/images/WOMEN TISHIRT/Sunflower Theory.jpg';
+
 const allProducts = [
+  // ── MEN SHIRTS ──
   {
     id: 1,
     category: 'Men Shirts',
+    subCategory: 'Hand Painted',
     img: menShirt1,
     img2: menShirt2,
     img3: menShirt3,
     img4: menShirt4,
     name: 'Custom Leaves Print Shirt',
-    desc: 'Premium cotton shirt with unique custom leaf print design. Perfect for casual and semi-formal occasions.',
+    desc: 'Premium cotton shirt with unique custom leaf print design.',
     price: 899,
     badge: 'Bestseller',
     sizes: ['S', 'M', 'L', 'XL', 'XXL'],
@@ -74,6 +116,7 @@ const allProducts = [
   {
     id: 2,
     category: 'Men Shirts',
+    subCategory: 'Normal Print',
     img: menShirt3,
     img2: menShirt4,
     name: 'Rounded Art Print Shirt',
@@ -84,12 +127,93 @@ const allProducts = [
     colors: ['#FFFFFF', '#1a1a1a', '#C9A84C'],
   },
   {
+    id: 36,
+    category: 'Men Shirts',
+    subCategory: 'Floral Print',
+    img: menShirt5,
+    img2: menShirt6,
+    name: 'Avalipt Kyaari Shirt',
+    desc: 'Beautiful Avalipt Kyaari floral print on premium cotton shirt.',
+    price: 899,
+    badge: 'New',
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    colors: ['#FFFFFF', '#1a1a1a', '#C9A84C'],
+  },
+  {
+    id: 37,
+    category: 'Men Shirts',
+    subCategory: 'Floral Print',
+    img: menShirt6,
+    img2: menShirt7,
+    name: 'Flower Print Shirt',
+    desc: 'Elegant flower print on soft cotton. A unique custom design shirt.',
+    price: 849,
+    badge: '',
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    colors: ['#FFFFFF', '#F4C2C2', '#C9A84C'],
+  },
+  {
+    id: 38,
+    category: 'Men Shirts',
+    subCategory: 'Hand Painted',
+    img: menShirt7,
+    img2: menShirt8,
+    name: 'Leave Fall Shirt',
+    desc: 'Hand painted leave fall design on premium cotton. Artistic and elegant.',
+    price: 949,
+    badge: 'Unique',
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    colors: ['#2D5A27', '#FFFFFF', '#1a1a1a'],
+  },
+  {
+    id: 39,
+    category: 'Men Shirts',
+    subCategory: 'Normal Print',
+    img: menShirt8,
+    img2: menShirt9,
+    name: 'Mushroom Print Shirt',
+    desc: 'Quirky mushroom print on soft cotton. Fun and fully customisable.',
+    price: 849,
+    badge: 'Trending',
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    colors: ['#FFA500', '#FFFFFF', '#1a1a1a'],
+  },
+  {
+    id: 40,
+    category: 'Men Shirts',
+    subCategory: 'Floral Print',
+    img: menShirt9,
+    img2: menShirt10,
+    name: 'Spotted Flower Shirt',
+    desc: 'Delicate spotted flower print on premium cotton shirt.',
+    price: 899,
+    badge: '',
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    colors: ['#FFFFFF', '#1B3A6B', '#C9A84C'],
+  },
+  {
+    id: 41,
+    category: 'Men Shirts',
+    subCategory: 'Floral Print',
+    img: menShirt10,
+    img2: menShirt5,
+    name: 'Spring Mood Shirt',
+    desc: 'Fresh spring mood floral print on soft cotton. Perfect for every season.',
+    price: 899,
+    badge: 'Popular',
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    colors: ['#2D5A27', '#FFFFFF', '#F4C2C2'],
+  },
+
+  // ── MENS T-SHIRT ──
+  {
     id: 3,
     category: 'Mens T-Shirt',
+    subCategory: 'Normal Print',
     img: mensTshirt1,
     img2: mensTshirt2,
     name: 'Introvert Graphic Tee',
-    desc: 'Soft 100% cotton tee with bold custom graphic print. Great for casual wear and gifting.',
+    desc: 'Soft 100% cotton tee with bold custom graphic print.',
     price: 499,
     badge: 'Popular',
     sizes: ['S', 'M', 'L', 'XL', 'XXL'],
@@ -98,6 +222,7 @@ const allProducts = [
   {
     id: 4,
     category: 'Mens T-Shirt',
+    subCategory: 'Hand Painted',
     img: mensTshirt2,
     img2: mensTshirt1,
     name: 'Leaf Design Tee',
@@ -108,14 +233,108 @@ const allProducts = [
     colors: ['#2D5A27', '#1a1a1a', '#FFFFFF'],
   },
   {
+    id: 48,
+    category: 'Mens T-Shirt',
+    subCategory: 'Mandala Print',
+    img: mensTshirt3,
+    img2: mensTshirt4,
+    name: 'Sun Moon Tee',
+    desc: 'Mystical sun and moon mandala print on soft cotton tee.',
+    price: 549,
+    badge: 'Trending',
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    colors: ['#1a1a1a', '#FFFFFF', '#C9A84C'],
+  },
+  {
+    id: 49,
+    category: 'Mens T-Shirt',
+    subCategory: 'Mandala Print',
+    img: mensTshirt4,
+    img2: mensTshirt5,
+    name: 'Abstract Sun Moon Tee',
+    desc: 'Abstract sun and moon design on premium cotton tee. Bold and unique.',
+    price: 599,
+    badge: 'Unique',
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    colors: ['#1a1a1a', '#C9A84C', '#8B6914'],
+  },
+  {
+    id: 50,
+    category: 'Mens T-Shirt',
+    subCategory: 'Normal Print',
+    img: mensTshirt5,
+    img2: mensTshirt6,
+    name: 'Boho Tribal Tee',
+    desc: 'Cool boho tribal print tee on soft cotton. Perfect for casual wear.',
+    price: 499,
+    badge: '',
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    colors: ['#FFFFFF', '#FFA500', '#1a1a1a'],
+  },
+  {
+    id: 51,
+    category: 'Mens T-Shirt',
+    subCategory: 'Mandala Print',
+    img: mensTshirt6,
+    img2: mensTshirt7,
+    name: 'Devoite Mandala Tee',
+    desc: 'Stunning devoite mandala print on premium cotton tee.',
+    price: 549,
+    badge: 'Popular',
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    colors: ['#1B3A6B', '#1a1a1a', '#C9A84C'],
+  },
+  {
+    id: 52,
+    category: 'Mens T-Shirt',
+    subCategory: 'Normal Print',
+    img: mensTshirt7,
+    img2: mensTshirt8,
+    name: 'Guitar Print Tee',
+    desc: 'Cool guitar print on soft cotton. Perfect for music lovers.',
+    price: 499,
+    badge: '',
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    colors: ['#1a1a1a', '#FFFFFF', '#8B0000'],
+  },
+  {
+    id: 53,
+    category: 'Mens T-Shirt',
+    subCategory: 'Normal Print',
+    img: mensTshirt8,
+    img2: mensTshirt9,
+    name: 'Intricate Geometric Tee',
+    desc: 'Bold intricate geometric design on premium cotton tee.',
+    price: 549,
+    badge: 'Unique',
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    colors: ['#1a1a1a', '#FFFFFF', '#C9A84C'],
+  },
+  {
+    id: 54,
+    category: 'Mens T-Shirt',
+    subCategory: 'Normal Print',
+    img: mensTshirt9,
+    img2: mensTshirt3,
+    name: 'Ocean Print Tee',
+    desc: 'Refreshing ocean print on soft cotton tee. Perfect for summer vibes.',
+    price: 499,
+    badge: 'New',
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    colors: ['#1B3A6B', '#FFFFFF', '#40E0D0'],
+  },
+
+  // ── MEN KURTA ──
+  {
     id: 5,
     category: 'Men Kurta',
+    subCategory: 'Floral Print',
     img: menKurta1,
     img2: menKurta2,
     img3: menKurta3,
     img4: menKurta4,
     name: 'Floral Print Kurta',
-    desc: 'Elegant floral print short kurta on plain cotton. Perfect for festive and casual occasions.',
+    desc: 'Elegant floral print short kurta on plain cotton.',
     price: 849,
     badge: 'New',
     sizes: ['S', 'M', 'L', 'XL', 'XXL'],
@@ -124,22 +343,104 @@ const allProducts = [
   {
     id: 6,
     category: 'Men Kurta',
+    subCategory: 'Mandala Print',
     img: menKurta2,
     img2: menKurta3,
     name: 'Mandala Print Kurta',
-    desc: 'Premium mandala block print short kurta. A stunning custom design for every occasion.',
+    desc: 'Premium mandala block print short kurta. A stunning custom design.',
     price: 899,
     badge: 'Bestseller',
     sizes: ['S', 'M', 'L', 'XL', 'XXL'],
     colors: ['#1a1a1a', '#1B3A6B', '#8B6914'],
   },
   {
+    id: 42,
+    category: 'Men Kurta',
+    subCategory: 'Floral Print',
+    img: menKurta5,
+    img2: menKurta6,
+    name: 'Floral Kurta Vol 2',
+    desc: 'Premium floral print short kurta on plain cotton. Elegant and festive.',
+    price: 849,
+    badge: '',
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    colors: ['#FFFFFF', '#F4C2C2', '#C9A84C'],
+  },
+  {
+    id: 43,
+    category: 'Men Kurta',
+    subCategory: 'Floral Print',
+    img: menKurta7,
+    img2: menKurta8,
+    name: 'Floral Kurta Vol 3',
+    desc: 'Beautiful floral design short kurta. Perfect for casual and festive wear.',
+    price: 899,
+    badge: 'New',
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    colors: ['#1B3A6B', '#FFFFFF', '#C9A84C'],
+  },
+  {
+    id: 44,
+    category: 'Men Kurta',
+    subCategory: 'Floral Print',
+    img: menKurta9,
+    img2: menKurta10,
+    name: 'Floral Kurta Vol 4',
+    desc: 'Unique floral print kurta with premium stitching. Fully customisable.',
+    price: 949,
+    badge: 'Unique',
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    colors: ['#FFFFFF', '#2D5A27', '#C9A84C'],
+  },
+  {
+    id: 45,
+    category: 'Men Kurta',
+    subCategory: 'Mandala Print',
+    img: menKurta11,
+    img2: menKurta12,
+    name: 'Kolar Border Mandala Kurta',
+    desc: 'Stunning kolar border mandala print kurta. A premium festive choice.',
+    price: 999,
+    badge: 'Premium',
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    colors: ['#FFFFFF', '#1a1a1a', '#C9A84C', '#8B6914'],
+  },
+  {
+    id: 46,
+    category: 'Men Kurta',
+    subCategory: 'Mandala Print',
+    img: menKurta12,
+    img2: menKurta13,
+    name: 'Kolar Mandala Kurta',
+    desc: 'Classic kolar mandala design short kurta. Elegant and fully customisable.',
+    price: 949,
+    badge: 'Bestseller',
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    colors: ['#1B3A6B', '#1a1a1a', '#C9A84C'],
+  },
+  {
+    id: 47,
+    category: 'Men Kurta',
+    subCategory: 'Mandala Print',
+    img: menKurta13,
+    img2: menKurta14,
+    name: 'Mandala Kurta Vol 2',
+    desc: 'Rich mandala print short kurta on premium cotton.',
+    price: 899,
+    badge: '',
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    colors: ['#1a1a1a', '#8B6914', '#1B3A6B'],
+  },
+
+  // ── WOMEN KURTI ──
+  {
     id: 7,
     category: 'Women Kurti',
+    subCategory: 'Mandala Print',
     img: womenKurti1,
     img2: womenKurti2,
     name: 'Border Mandala Kurti',
-    desc: 'Beautiful border mandala print short kurti on soft cotton. Elegant and fully customisable.',
+    desc: 'Beautiful border mandala print short kurti on soft cotton.',
     price: 749,
     badge: 'New',
     sizes: ['S', 'M', 'L', 'XL'],
@@ -148,6 +449,7 @@ const allProducts = [
   {
     id: 8,
     category: 'Women Kurti',
+    subCategory: 'Hand Painted',
     img: womenKurti2,
     img2: womenKurti1,
     name: 'Hand Painted Kurti',
@@ -158,8 +460,63 @@ const allProducts = [
     colors: ['#F4C2C2', '#FFFFFF', '#C9A84C'],
   },
   {
+    id: 55,
+    category: 'Women Kurti',
+    subCategory: 'Floral Print',
+    img: womenKurti3,
+    img2: womenKurti4,
+    name: 'Floral Print Kurti',
+    desc: 'Elegant floral print short kurti on soft cotton. Beautiful and customisable.',
+    price: 749,
+    badge: 'New',
+    sizes: ['S', 'M', 'L', 'XL'],
+    colors: ['#F4C2C2', '#FFFFFF', '#C9A84C', '#800080'],
+  },
+  {
+    id: 56,
+    category: 'Women Kurti',
+    subCategory: 'Floral Print',
+    img: womenKurti4,
+    img2: womenKurti5,
+    name: 'Lotus Print Kurti',
+    desc: 'Beautiful lotus print on premium cotton kurti. Elegant and graceful.',
+    price: 799,
+    badge: 'Popular',
+    sizes: ['S', 'M', 'L', 'XL'],
+    colors: ['#F4C2C2', '#FFFFFF', '#800080'],
+  },
+  {
+    id: 57,
+    category: 'Women Kurti',
+    subCategory: 'Hand Painted',
+    img: womenKurti5,
+    img2: womenKurti6,
+    name: 'Madhubani Painting Kurti',
+    desc: 'Unique Madhubani hand painting on premium cotton kurti. Every piece is one of a kind.',
+    price: 899,
+    badge: 'Unique',
+    sizes: ['S', 'M', 'L', 'XL'],
+    colors: ['#F4C2C2', '#FFFFFF', '#C9A84C', '#FFA500'],
+  },
+  {
+    id: 58,
+    category: 'Women Kurti',
+    subCategory: 'Mandala Print',
+    img: womenKurti6,
+    img2: womenKurti1,
+    name: 'Mandala Sleeves Kurti',
+    desc: 'Stunning mandala print on sleeves of premium cotton kurti.',
+    price: 849,
+    badge: 'Trending',
+    sizes: ['S', 'M', 'L', 'XL'],
+    colors: ['#2D5A27', '#FFFFFF', '#C9A84C'],
+  },
+
+  // ── WOMEN SHIRT ──
+  {
     id: 9,
     category: 'Women Shirt',
+    subCategory: 'Normal Print',
     img: womenShirt1,
     img2: womenShirt2,
     img3: womenShirt3,
@@ -173,18 +530,167 @@ const allProducts = [
   {
     id: 10,
     category: 'Women Shirt',
+    subCategory: 'Normal Print',
     img: womenShirt2,
     img2: womenShirt3,
     name: 'Cat Path Print Shirt',
-    desc: 'Cute and quirky cat path print on soft cotton. A perfect custom design for cat lovers.',
+    desc: 'Cute and quirky cat path print on soft cotton.',
     price: 749,
     badge: '',
     sizes: ['S', 'M', 'L', 'XL'],
     colors: ['#FFFFFF', '#F4C2C2', '#1a1a1a'],
   },
   {
+    id: 59,
+    category: 'Women Shirt',
+    subCategory: 'Floral Print',
+    img: womenShirt4,
+    img2: womenShirt5,
+    name: 'Bittersweet Print Shirt',
+    desc: 'Sweet and elegant bittersweet print on premium cotton shirt for women.',
+    price: 799,
+    badge: 'New',
+    sizes: ['S', 'M', 'L', 'XL'],
+    colors: ['#F4C2C2', '#FFFFFF', '#C9A84C'],
+  },
+  {
+    id: 60,
+    category: 'Women Shirt',
+    subCategory: 'Hand Painted',
+    img: womenShirt5,
+    img2: womenShirt6,
+    name: 'Hand Paint Face Print Shirt',
+    desc: 'Unique hand painted face print on premium cotton. Artistic and bold.',
+    price: 899,
+    badge: 'Unique',
+    sizes: ['S', 'M', 'L', 'XL'],
+    colors: ['#FFFFFF', '#1a1a1a', '#C9A84C'],
+  },
+  {
+    id: 61,
+    category: 'Women Shirt',
+    subCategory: 'Normal Print',
+    img: womenShirt6,
+    img2: womenShirt7,
+    name: 'Hummingbird Print Shirt',
+    desc: 'Beautiful hummingbird print on soft cotton shirt. Elegant and graceful.',
+    price: 849,
+    badge: 'Popular',
+    sizes: ['S', 'M', 'L', 'XL'],
+    colors: ['#FFFFFF', '#2D5A27', '#F4C2C2'],
+  },
+  {
+    id: 62,
+    category: 'Women Shirt',
+    subCategory: 'Normal Print',
+    img: womenShirt7,
+    img2: womenShirt1,
+    name: 'Nature Obsessed Shirt',
+    desc: 'Nature inspired print on premium cotton shirt. Perfect for nature lovers.',
+    price: 799,
+    badge: 'Trending',
+    sizes: ['S', 'M', 'L', 'XL'],
+    colors: ['#2D5A27', '#FFFFFF', '#8B6914'],
+  },
+
+  // ── WOMEN T-SHIRT ──
+  {
+    id: 63,
+    category: 'Women T-Shirt',
+    subCategory: 'Floral Print',
+    img: womenTshirt1,
+    img2: womenTshirt2,
+    name: 'Animal Floral Geometric Tee',
+    desc: 'Unique animal floral geometric print on soft cotton tee for women.',
+    price: 449,
+    badge: 'New',
+    sizes: ['S', 'M', 'L', 'XL'],
+    colors: ['#FFFFFF', '#F4C2C2', '#C9A84C'],
+  },
+  {
+    id: 64,
+    category: 'Women T-Shirt',
+    subCategory: 'Normal Print',
+    img: womenTshirt2,
+    img2: womenTshirt3,
+    name: 'Animal Tribal Tee',
+    desc: 'Bold animal tribal print on premium cotton tee. Trendy and stylish.',
+    price: 499,
+    badge: 'Trending',
+    sizes: ['S', 'M', 'L', 'XL'],
+    colors: ['#1a1a1a', '#FFFFFF', '#C9A84C'],
+  },
+  {
+    id: 65,
+    category: 'Women T-Shirt',
+    subCategory: 'Normal Print',
+    img: womenTshirt3,
+    img2: womenTshirt4,
+    name: 'Abstract Face Tee',
+    desc: 'Modern abstract face design on soft cotton tee. Artistic and unique.',
+    price: 449,
+    badge: '',
+    sizes: ['S', 'M', 'L', 'XL'],
+    colors: ['#FFFFFF', '#F4C2C2', '#1a1a1a'],
+  },
+  {
+    id: 66,
+    category: 'Women T-Shirt',
+    subCategory: 'Normal Print',
+    img: womenTshirt4,
+    img2: womenTshirt5,
+    name: 'Panda Dream Tee',
+    desc: 'Cute panda dream print on soft cotton tee. Adorable and fully customisable.',
+    price: 449,
+    badge: 'Popular',
+    sizes: ['S', 'M', 'L', 'XL'],
+    colors: ['#F4C2C2', '#FFFFFF', '#1a1a1a'],
+  },
+  {
+    id: 67,
+    category: 'Women T-Shirt',
+    subCategory: 'Hand Painted',
+    img: womenTshirt5,
+    img2: womenTshirt6,
+    name: 'Spiritual Goddess Tee',
+    desc: 'Beautiful spiritual goddess hand painted design on premium cotton tee.',
+    price: 549,
+    badge: 'Unique',
+    sizes: ['S', 'M', 'L', 'XL'],
+    colors: ['#FFFFFF', '#C9A84C', '#800080'],
+  },
+  {
+    id: 68,
+    category: 'Women T-Shirt',
+    subCategory: 'Mandala Print',
+    img: womenTshirt6,
+    img2: womenTshirt7,
+    name: 'Sun and Moon Tee',
+    desc: 'Mystical sun and moon mandala print on soft cotton tee for women.',
+    price: 499,
+    badge: 'Trending',
+    sizes: ['S', 'M', 'L', 'XL'],
+    colors: ['#2D5A27', '#1a1a1a', '#C9A84C'],
+  },
+  {
+    id: 69,
+    category: 'Women T-Shirt',
+    subCategory: 'Floral Print',
+    img: womenTshirt7,
+    img2: womenTshirt1,
+    name: 'Sunflower Theory Tee',
+    desc: 'Beautiful sunflower theory print on premium cotton tee. Bright and cheerful.',
+    price: 449,
+    badge: 'New',
+    sizes: ['S', 'M', 'L', 'XL'],
+    colors: ['#FFA500', '#FFFFFF', '#2D5A27'],
+  },
+
+  // ── HANDKERCHIEF ──
+  {
     id: 11,
     category: 'Handkerchief',
+    subCategory: 'Normal Print',
     img: handkerchief1,
     img2: handkerchief2,
     img3: handkerchief3,
@@ -198,10 +704,11 @@ const allProducts = [
   {
     id: 12,
     category: 'Handkerchief',
+    subCategory: 'Normal Print',
     img: handkerchief2,
     img2: handkerchief3,
     name: 'Bro & Sis Special',
-    desc: 'Beautiful custom handkerchief for brothers and sisters. A unique gifting choice.',
+    desc: 'Beautiful custom handkerchief for brothers and sisters.',
     price: 149,
     badge: 'Gift',
     sizes: ['Free Size'],
@@ -210,6 +717,7 @@ const allProducts = [
   {
     id: 13,
     category: 'Handkerchief',
+    subCategory: 'Normal Print',
     img: handkerchief3,
     img2: handkerchief4,
     name: 'Couple Bear Handkerchief',
@@ -222,6 +730,7 @@ const allProducts = [
   {
     id: 14,
     category: 'Handkerchief',
+    subCategory: 'Personalised',
     img: handkerchief4,
     img2: handkerchief5,
     name: 'Couple with Name',
@@ -234,6 +743,7 @@ const allProducts = [
   {
     id: 15,
     category: 'Handkerchief',
+    subCategory: 'Normal Print',
     img: handkerchief5,
     img2: handkerchief6,
     name: 'Evil Eye Protection',
@@ -246,10 +756,11 @@ const allProducts = [
   {
     id: 16,
     category: 'Handkerchief',
+    subCategory: 'Personalised',
     img: handkerchief6,
     img2: handkerchief7,
     name: 'Holding Hands Special',
-    desc: 'Heartwarming holding hands design. Perfect for anniversaries and special occasions.',
+    desc: 'Heartwarming holding hands design. Perfect for anniversaries.',
     price: 179,
     badge: 'Special',
     sizes: ['Free Size'],
@@ -258,23 +769,27 @@ const allProducts = [
   {
     id: 17,
     category: 'Handkerchief',
+    subCategory: 'Personalised',
     img: handkerchief7,
     img2: handkerchief1,
     name: 'Rakhi Special Custom',
-    desc: 'Special Rakhi custom handkerchief for brothers and sisters. A memorable gift.',
+    desc: 'Special Rakhi custom handkerchief for brothers and sisters.',
     price: 199,
     badge: 'Festival',
     sizes: ['Free Size'],
     colors: ['#FFA500', '#FFFFFF', '#8B0000'],
   },
+
+  // ── COUPLE WEAR ──
   {
     id: 23,
     category: 'Couple Wear',
+    subCategory: 'Normal Print',
     img: coupleWear1,
     img2: coupleWear2,
     img3: coupleWear3,
     name: 'Bear Couple Wear',
-    desc: 'Adorable bear theme matching outfit for couples. Cute and fully customisable.',
+    desc: 'Adorable bear theme matching outfit for couples.',
     price: 999,
     badge: 'Couple',
     sizes: ['S', 'M', 'L', 'XL', 'XXL'],
@@ -283,10 +798,11 @@ const allProducts = [
   {
     id: 24,
     category: 'Couple Wear',
+    subCategory: 'Normal Print',
     img: coupleWear2,
     img2: coupleWear3,
     name: 'Cartoon Couple Wear',
-    desc: 'Fun cartoon theme matching couple outfit. Perfect for casual outings and gifting.',
+    desc: 'Fun cartoon theme matching couple outfit.',
     price: 1099,
     badge: 'Popular',
     sizes: ['S', 'M', 'L', 'XL', 'XXL'],
@@ -295,10 +811,11 @@ const allProducts = [
   {
     id: 25,
     category: 'Couple Wear',
+    subCategory: 'Personalised',
     img: coupleWear3,
     img2: coupleWear4,
     name: 'Dudu & Bubu Special',
-    desc: 'Sweet Dudu & Bubu theme couple matching wear. A unique personalised gift.',
+    desc: 'Sweet Dudu & Bubu theme couple matching wear.',
     price: 1199,
     badge: 'Special',
     sizes: ['S', 'M', 'L', 'XL'],
@@ -307,10 +824,11 @@ const allProducts = [
   {
     id: 26,
     category: 'Couple Wear',
+    subCategory: 'Normal Print',
     img: coupleWear4,
     img2: coupleWear5,
     name: 'Harry Potter Couple',
-    desc: 'Magical Harry Potter theme matching couple outfit. Perfect for Potterheads.',
+    desc: 'Magical Harry Potter theme matching couple outfit.',
     price: 1299,
     badge: 'Trending',
     sizes: ['S', 'M', 'L', 'XL', 'XXL'],
@@ -319,10 +837,11 @@ const allProducts = [
   {
     id: 27,
     category: 'Couple Wear',
+    subCategory: 'Normal Print',
     img: coupleWear5,
     img2: coupleWear6,
     name: 'Pizza Couple Wear',
-    desc: 'Fun and quirky pizza theme couple matching wear. Great for foodie couples!',
+    desc: 'Fun and quirky pizza theme couple matching wear.',
     price: 999,
     badge: '',
     sizes: ['S', 'M', 'L', 'XL', 'XXL'],
@@ -331,23 +850,27 @@ const allProducts = [
   {
     id: 28,
     category: 'Couple Wear',
+    subCategory: 'Normal Print',
     img: coupleWear6,
     img2: coupleWear1,
     name: 'Tom & Jerry Couple',
-    desc: 'Classic Tom & Jerry theme couple matching outfit. Playful and fully customisable.',
+    desc: 'Classic Tom & Jerry theme couple matching outfit.',
     price: 1099,
     badge: 'Bestseller',
     sizes: ['S', 'M', 'L', 'XL', 'XXL'],
     colors: ['#C9A84C', '#1a1a1a', '#FFFFFF'],
   },
+
+  // ── HOODIE ──
   {
     id: 29,
     category: 'Hoodie',
+    subCategory: 'Normal Print',
     img: hoodie1,
     img2: hoodie2,
     img3: hoodie3,
     name: 'Bear Hoodie',
-    desc: 'Cozy and warm custom hoodie with cute bear design. Perfect for winters.',
+    desc: 'Cozy and warm custom hoodie with cute bear design.',
     price: 1299,
     badge: 'New',
     sizes: ['S', 'M', 'L', 'XL', 'XXL'],
@@ -356,10 +879,11 @@ const allProducts = [
   {
     id: 30,
     category: 'Hoodie',
+    subCategory: 'Normal Print',
     img: hoodie2,
     img2: hoodie3,
     name: 'Forever Hoodie',
-    desc: 'Premium custom hoodie with Forever print. Warm, stylish and fully customisable.',
+    desc: 'Premium custom hoodie with Forever print. Warm and stylish.',
     price: 1399,
     badge: 'Popular',
     sizes: ['S', 'M', 'L', 'XL', 'XXL'],
@@ -368,10 +892,11 @@ const allProducts = [
   {
     id: 31,
     category: 'Hoodie',
+    subCategory: 'Normal Print',
     img: hoodie3,
     img2: hoodie4,
     name: 'Harry Potter Hoodie',
-    desc: 'Magical Harry Potter themed custom hoodie. A must have for every Potterhead.',
+    desc: 'Magical Harry Potter themed custom hoodie.',
     price: 1499,
     badge: 'Trending',
     sizes: ['S', 'M', 'L', 'XL', 'XXL'],
@@ -380,10 +905,11 @@ const allProducts = [
   {
     id: 32,
     category: 'Hoodie',
+    subCategory: 'Hand Painted',
     img: hoodie4,
     img2: hoodie5,
     name: 'Human Heart Hoodie',
-    desc: 'Unique human heart design custom hoodie. Bold and artistic statement piece.',
+    desc: 'Unique human heart design custom hoodie. Bold and artistic.',
     price: 1399,
     badge: 'Unique',
     sizes: ['S', 'M', 'L', 'XL', 'XXL'],
@@ -392,10 +918,11 @@ const allProducts = [
   {
     id: 33,
     category: 'Hoodie',
+    subCategory: 'Personalised',
     img: hoodie5,
     img2: hoodie6,
     name: 'Mine Forever Hoodie',
-    desc: 'Romantic Mine Forever custom hoodie. Perfect gift for couples and loved ones.',
+    desc: 'Romantic Mine Forever custom hoodie. Perfect gift for couples.',
     price: 1299,
     badge: 'Gift',
     sizes: ['S', 'M', 'L', 'XL', 'XXL'],
@@ -404,10 +931,11 @@ const allProducts = [
   {
     id: 34,
     category: 'Hoodie',
+    subCategory: 'Normal Print',
     img: hoodie6,
     img2: hoodie7,
     name: 'Panda Hoodie',
-    desc: 'Cute panda design premium custom hoodie. Cozy, warm and super adorable.',
+    desc: 'Cute panda design premium custom hoodie. Cozy and adorable.',
     price: 1299,
     badge: '',
     sizes: ['S', 'M', 'L', 'XL', 'XXL'],
@@ -416,10 +944,11 @@ const allProducts = [
   {
     id: 35,
     category: 'Hoodie',
+    subCategory: 'Normal Print',
     img: hoodie7,
     img2: hoodie1,
     name: 'Sun & Moon Hoodie',
-    desc: 'Beautiful sun and moon design custom hoodie. Mystical and fully customisable.',
+    desc: 'Beautiful sun and moon design custom hoodie. Mystical and customisable.',
     price: 1399,
     badge: 'Bestseller',
     sizes: ['S', 'M', 'L', 'XL', 'XXL'],
@@ -427,7 +956,7 @@ const allProducts = [
   },
 ];
 
-const categories = ['All', 'Men Shirts', 'Mens T-Shirt', 'Men Kurta', 'Women Kurti', 'Women Shirt', 'Couple Wear', 'Hoodie', 'Handkerchief'];
+const categories = ['All', 'Men Shirts', 'Mens T-Shirt', 'Men Kurta', 'Women Kurti', 'Women Shirt', 'Women T-Shirt', 'Couple Wear', 'Hoodie', 'Handkerchief'];
 
 export default function Products() {
   const { user } = useAuth();
@@ -442,6 +971,7 @@ export default function Products() {
   };
 
   const [activeCategory, setActiveCategory] = useState(getInitialCategory());
+  const [activeSubCategory, setActiveSubCategory] = useState('All');
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
@@ -449,8 +979,16 @@ export default function Products() {
   const [currentImg, setCurrentImg] = useState(0);
   const [cartMsg, setCartMsg] = useState('');
 
+  const subCategories = ['All', ...new Set(
+    allProducts
+      .filter(p => activeCategory === 'All' || p.category === activeCategory)
+      .map(p => p.subCategory)
+      .filter(Boolean)
+  )];
+
   const filtered = allProducts
     .filter(p => activeCategory === 'All' || p.category === activeCategory)
+    .filter(p => activeSubCategory === 'All' || p.subCategory === activeSubCategory)
     .sort((a, b) => {
       if (sortBy === 'low') return a.price - b.price;
       if (sortBy === 'high') return b.price - a.price;
@@ -475,20 +1013,20 @@ export default function Products() {
   };
 
   const handleBuyNow = () => {
-  if (!user) { navigate('/login'); return; }
-  if (!selectedSize) { alert('Please select a size.'); return; }
-  navigate('/checkout', {
-    state: {
-      item: {
-        ...selectedProduct,
-        size: selectedSize,
-        color: selectedColor,
-        quantity: 1,
-        cartId: Date.now(),
+    if (!user) { navigate('/login'); return; }
+    if (!selectedSize) { alert('Please select a size.'); return; }
+    navigate('/checkout', {
+      state: {
+        item: {
+          ...selectedProduct,
+          size: selectedSize,
+          color: selectedColor,
+          quantity: 1,
+          cartId: Date.now(),
+        }
       }
-    }
-  });
-};
+    });
+  };
 
   const handleAddToCart = () => {
     if (!user) { navigate('/login'); return; }
@@ -550,6 +1088,33 @@ export default function Products() {
         }
         .cat-tab:hover { border-color: rgba(201,168,76,0.5); color: #C9A84C; }
         .cat-tab.active { background: #C9A84C; border-color: #C9A84C; color: #0A0A0A; }
+        .sub-filter-wrap { margin-top: 20px; }
+        .sub-filter-label {
+          font-size: 9px;
+          letter-spacing: 3px;
+          text-transform: uppercase;
+          color: #C9A84C;
+          margin-bottom: 10px;
+        }
+        .sub-tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+        .sub-tab {
+          padding: 7px 16px;
+          font-size: 10px;
+          letter-spacing: 2px;
+          text-transform: uppercase;
+          border: 1px solid rgba(201,168,76,0.15);
+          background: transparent;
+          color: #666;
+          cursor: pointer;
+          font-family: 'Jost', sans-serif;
+          transition: all 0.2s;
+        }
+        .sub-tab:hover { border-color: rgba(201,168,76,0.4); color: #C9A84C; }
+        .sub-tab.active {
+          border-color: #C9A84C;
+          background: rgba(201,168,76,0.12);
+          color: #C9A84C;
+        }
         .sort-select {
           background: rgba(255,255,255,0.04);
           border: 1px solid rgba(201,168,76,0.2);
@@ -598,9 +1163,7 @@ export default function Products() {
           display: block;
           transition: transform 0.5s;
         }
-        .product-card:hover .product-img-area img {
-          transform: scale(1.05);
-        }
+        .product-card:hover .product-img-area img { transform: scale(1.05); }
         .product-badge {
           position: absolute;
           top: 16px;
@@ -620,6 +1183,13 @@ export default function Products() {
           letter-spacing: 3px;
           text-transform: uppercase;
           color: #C9A84C;
+          margin-bottom: 4px;
+        }
+        .product-subcategory {
+          font-size: 8px;
+          letter-spacing: 2px;
+          text-transform: uppercase;
+          color: #555;
           margin-bottom: 8px;
         }
         .product-name {
@@ -661,7 +1231,6 @@ export default function Products() {
           border-color: #C9A84C;
           color: #0A0A0A;
         }
-        /* MODAL */
         .modal-overlay {
           position: fixed;
           inset: 0;
@@ -706,16 +1275,20 @@ export default function Products() {
           transition: all 0.2s;
           opacity: 0.6;
         }
-        .modal-thumb.active {
-          border-color: #C9A84C;
-          opacity: 1;
-        }
+        .modal-thumb.active { border-color: #C9A84C; opacity: 1; }
         .modal-right { padding: 28px; overflow-y: auto; }
         .modal-category {
           font-size: 9px;
           letter-spacing: 4px;
           text-transform: uppercase;
           color: #C9A84C;
+          margin-bottom: 4px;
+        }
+        .modal-subcategory {
+          font-size: 8px;
+          letter-spacing: 2px;
+          text-transform: uppercase;
+          color: #555;
           margin-bottom: 8px;
         }
         .modal-name {
@@ -811,7 +1384,6 @@ export default function Products() {
           margin-bottom: 12px;
           text-align: center;
         }
-        /* RESPONSIVE */
         @media (max-width: 1024px) {
           .products-grid { grid-template-columns: repeat(2, 1fr); }
         }
@@ -840,7 +1412,7 @@ export default function Products() {
                 <button
                   key={cat}
                   className={`cat-tab ${activeCategory === cat ? 'active' : ''}`}
-                  onClick={() => setActiveCategory(cat)}
+                  onClick={() => { setActiveCategory(cat); setActiveSubCategory('All'); }}
                 >
                   {cat}
                 </button>
@@ -859,10 +1431,27 @@ export default function Products() {
               </select>
             </div>
           </div>
+
+          {activeCategory !== 'All' && subCategories.length > 2 && (
+            <div className="sub-filter-wrap">
+              <p className="sub-filter-label">Filter by Print Type</p>
+              <div className="sub-tabs">
+                {subCategories.map(sub => (
+                  <button
+                    key={sub}
+                    className={`sub-tab ${activeSubCategory === sub ? 'active' : ''}`}
+                    onClick={() => setActiveSubCategory(sub)}
+                  >
+                    {sub}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
           <p className="products-count">{filtered.length} Products Found</p>
         </div>
 
-        {/* GRID */}
         <div className="products-grid">
           {filtered.map(p => (
             <div className="product-card" key={p.id}>
@@ -886,6 +1475,7 @@ export default function Products() {
               </div>
               <div className="product-info">
                 <p className="product-category">{p.category}</p>
+                {p.subCategory && <p className="product-subcategory">{p.subCategory}</p>}
                 <h3 className="product-name">{p.name}</h3>
                 <p className="product-desc">{p.desc}</p>
                 <div className="product-bottom">
@@ -901,12 +1491,9 @@ export default function Products() {
         </div>
       </div>
 
-      {/* PRODUCT MODAL */}
       {selectedProduct && (
         <div className="modal-overlay" onClick={closeProduct}>
           <div className="modal-box" onClick={e => e.stopPropagation()}>
-
-            {/* LEFT — IMAGES */}
             <div className="modal-left">
               <button className="modal-close-btn" onClick={closeProduct}>
                 <FiX size={14} />
@@ -931,9 +1518,11 @@ export default function Products() {
               )}
             </div>
 
-            {/* RIGHT — DETAILS */}
             <div className="modal-right">
               <p className="modal-category">{selectedProduct.category}</p>
+              {selectedProduct.subCategory && (
+                <p className="modal-subcategory">✦ {selectedProduct.subCategory}</p>
+              )}
               <h2 className="modal-name">{selectedProduct.name}</h2>
               <p className="modal-desc">{selectedProduct.desc}</p>
               <div className="modal-price">₹{selectedProduct.price}</div>
@@ -970,10 +1559,8 @@ export default function Products() {
                 ))}
               </div>
 
-              {/* CART SUCCESS MESSAGE */}
               {cartMsg && <div className="cart-success-msg">{cartMsg}</div>}
 
-              {/* 3 BUTTONS */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 <button
                   className="btn-primary"
@@ -991,18 +1578,13 @@ export default function Products() {
                 </button>
                 <button
                   style={{
-                    width: '100%',
-                    padding: '12px',
-                    fontSize: '10px',
-                    letterSpacing: '2px',
-                    textAlign: 'center',
+                    width: '100%', padding: '12px', fontSize: '10px',
+                    letterSpacing: '2px', textAlign: 'center',
                     background: 'transparent',
                     border: '1px dashed rgba(201,168,76,0.3)',
-                    color: '#888',
-                    cursor: 'pointer',
+                    color: '#888', cursor: 'pointer',
                     fontFamily: "'Jost', sans-serif",
-                    textTransform: 'uppercase',
-                    transition: 'all 0.2s',
+                    textTransform: 'uppercase', transition: 'all 0.2s',
                   }}
                   onClick={() => {
                     closeProduct();
