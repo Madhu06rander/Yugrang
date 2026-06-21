@@ -155,7 +155,7 @@ export default function Footer() {
 
         {/* BOTTOM BAR */}
         <div className="footer-bottom">
-          <span className="footer-copy">© 2024 Luxe Thread. All rights reserved.</span>
+          <span className="footer-copy">© 2026 Luxe Thread. All rights reserved.</span>
           <span className="footer-copy">Made with ❤️ in India 🇮🇳</span>
         </div>
       </footer>

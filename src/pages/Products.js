@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { FiShoppingBag, FiSliders, FiX } from 'react-icons/fi';
+import { FiShoppingBag, FiSliders, FiX, FiArrowLeft } from 'react-icons/fi';
 import { useLocation } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
 
 // MEN KURTA IMAGES
 import menKurta1 from '../assets/images/MEN KURTA/floral.jpg';
@@ -266,7 +267,6 @@ const allProducts = [
     sizes: ['Free Size'],
     colors: ['#FFA500', '#FFFFFF', '#8B0000'],
   },
-
   {
     id: 23,
     category: 'Couple Wear',
@@ -427,12 +427,13 @@ const allProducts = [
   },
 ];
 
-const categories = ['All', 'Men Shirts', 'Mens T-Shirt', 'Men Kurta', 'Women Kurti', 'Women Shirt', 'Women T-Shirt', 'Couple Wear', 'Hoodie', 'Handkerchief'];
+const categories = ['All', 'Men Shirts', 'Mens T-Shirt', 'Men Kurta', 'Women Kurti', 'Women Shirt', 'Couple Wear', 'Hoodie', 'Handkerchief'];
 
 export default function Products() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const { addToCart } = useCart();
 
   const getInitialCategory = () => {
     const params = new URLSearchParams(location.search);
@@ -446,6 +447,7 @@ export default function Products() {
   const [selectedColor, setSelectedColor] = useState('');
   const [sortBy, setSortBy] = useState('default');
   const [currentImg, setCurrentImg] = useState(0);
+  const [cartMsg, setCartMsg] = useState('');
 
   const filtered = allProducts
     .filter(p => activeCategory === 'All' || p.category === activeCategory)
@@ -460,30 +462,39 @@ export default function Products() {
     setSelectedSize('');
     setSelectedColor('');
     setCurrentImg(0);
+    setCartMsg('');
   };
 
-  const closeProduct = () => setSelectedProduct(null);
+  const closeProduct = () => {
+    setSelectedProduct(null);
+    setCartMsg('');
+  };
 
   const getImages = (p) => {
     return [p.img, p.img2, p.img3, p.img4].filter(Boolean);
   };
 
-  const handleOrder = () => {
-    if (!user) {
-      navigate('/login');
-      return;
-    }
-    if (!selectedSize) {
-      alert('Please select a size.');
-      return;
-    }
-    navigate('/customize', {
-      state: {
-        product: selectedProduct.name,
+  const handleBuyNow = () => {
+  if (!user) { navigate('/login'); return; }
+  if (!selectedSize) { alert('Please select a size.'); return; }
+  navigate('/checkout', {
+    state: {
+      item: {
+        ...selectedProduct,
         size: selectedSize,
         color: selectedColor,
+        quantity: 1,
+        cartId: Date.now(),
       }
-    });
+    }
+  });
+};
+
+  const handleAddToCart = () => {
+    if (!user) { navigate('/login'); return; }
+    if (!selectedSize) { alert('Please select a size.'); return; }
+    addToCart(selectedProduct, selectedSize, selectedColor);
+    setCartMsg(`✅ "${selectedProduct.name}" added to cart!`);
   };
 
   return (
@@ -494,6 +505,23 @@ export default function Products() {
           padding: 100px 60px 80px;
           background: #0A0A0A;
         }
+        .back-btn-prod {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          background: transparent;
+          border: none;
+          color: #888;
+          font-size: 11px;
+          letter-spacing: 2px;
+          text-transform: uppercase;
+          cursor: pointer;
+          font-family: 'Jost', sans-serif;
+          margin-bottom: 32px;
+          transition: color 0.2s;
+          padding: 0;
+        }
+        .back-btn-prod:hover { color: #C9A84C; }
         .products-header { margin-bottom: 60px; }
         .filter-row {
           display: flex;
@@ -633,7 +661,6 @@ export default function Products() {
           border-color: #C9A84C;
           color: #0A0A0A;
         }
-
         /* MODAL */
         .modal-overlay {
           position: fixed;
@@ -774,7 +801,16 @@ export default function Products() {
           z-index: 10;
         }
         .modal-close-btn:hover { color: #C9A84C; border-color: #C9A84C; }
-
+        .cart-success-msg {
+          background: rgba(76,175,80,0.1);
+          border: 1px solid rgba(76,175,80,0.3);
+          color: #4CAF50;
+          padding: 10px 14px;
+          font-size: 11px;
+          letter-spacing: 1px;
+          margin-bottom: 12px;
+          text-align: center;
+        }
         /* RESPONSIVE */
         @media (max-width: 1024px) {
           .products-grid { grid-template-columns: repeat(2, 1fr); }
@@ -790,11 +826,14 @@ export default function Products() {
       `}</style>
 
       <div className="products-page">
+        <button className="back-btn-prod" onClick={() => navigate(-1)}>
+          <FiArrowLeft size={14} /> Back
+        </button>
+
         <div className="products-header">
           <p className="section-eyebrow">Our Collection</p>
           <h1 className="section-title">All Products</h1>
           <div className="section-line"></div>
-
           <div className="filter-row">
             <div className="category-tabs">
               {categories.map(cat => (
@@ -828,7 +867,21 @@ export default function Products() {
           {filtered.map(p => (
             <div className="product-card" key={p.id}>
               <div className="product-img-area">
-                <img src={p.img} alt={p.name} />
+                {p.img ? (
+                  <img src={p.img} alt={p.name} />
+                ) : (
+                  <div style={{
+                    width: '100%', height: '280px',
+                    background: 'linear-gradient(135deg, #1a1a1a, #0d0d0d)',
+                    display: 'flex', flexDirection: 'column',
+                    alignItems: 'center', justifyContent: 'center', gap: '12px',
+                  }}>
+                    <span style={{ fontSize: '72px' }}>{p.icon}</span>
+                    <span style={{ fontSize: '10px', letterSpacing: '3px', color: '#444', textTransform: 'uppercase' }}>
+                      Image Coming Soon
+                    </span>
+                  </div>
+                )}
                 {p.badge && <span className="product-badge">{p.badge}</span>}
               </div>
               <div className="product-info">
@@ -917,13 +970,54 @@ export default function Products() {
                 ))}
               </div>
 
-              <button
-                className="btn-primary"
-                style={{ width: '100%', padding: '14px', fontSize: '11px', letterSpacing: '2px' }}
-                onClick={handleOrder}
-              >
-                {user ? 'Customise & Order →' : 'Login to Order →'}
-              </button>
+              {/* CART SUCCESS MESSAGE */}
+              {cartMsg && <div className="cart-success-msg">{cartMsg}</div>}
+
+              {/* 3 BUTTONS */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                <button
+                  className="btn-primary"
+                  style={{ width: '100%', padding: '14px', fontSize: '11px', letterSpacing: '2px' }}
+                  onClick={handleBuyNow}
+                >
+                  {user ? '🛍️ Buy Now →' : 'Login to Buy →'}
+                </button>
+                <button
+                  className="btn-outline"
+                  style={{ width: '100%', padding: '14px', fontSize: '11px', letterSpacing: '2px', textAlign: 'center' }}
+                  onClick={handleAddToCart}
+                >
+                  🛒 Add to Cart
+                </button>
+                <button
+                  style={{
+                    width: '100%',
+                    padding: '12px',
+                    fontSize: '10px',
+                    letterSpacing: '2px',
+                    textAlign: 'center',
+                    background: 'transparent',
+                    border: '1px dashed rgba(201,168,76,0.3)',
+                    color: '#888',
+                    cursor: 'pointer',
+                    fontFamily: "'Jost', sans-serif",
+                    textTransform: 'uppercase',
+                    transition: 'all 0.2s',
+                  }}
+                  onClick={() => {
+                    closeProduct();
+                    navigate('/customize', {
+                      state: {
+                        product: selectedProduct.name,
+                        size: selectedSize,
+                        color: selectedColor,
+                      }
+                    });
+                  }}
+                >
+                  ✏️ Want Custom Design Instead?
+                </button>
+              </div>
 
               {!user && (
                 <p style={{ fontSize: '11px', color: '#888', textAlign: 'center', marginTop: '12px' }}>

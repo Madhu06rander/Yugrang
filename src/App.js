@@ -2,6 +2,8 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { useAuth } from './context/AuthContext';
+import { CartProvider } from './context/CartContext';
+
 
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -11,6 +13,8 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Products from './pages/Products';
 import Customize from './pages/Customize';
+import Cart from './pages/Cart';
+import Checkout from './pages/Checkout';
 
 import './styles/global.css';
 
@@ -26,24 +30,36 @@ function ProtectedRoute({ children }) {
 function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/products" element={<Products />} />
-          <Route
-            path="/customize"
-            element={
-              <ProtectedRoute>
-                <Customize />
-              </ProtectedRoute>
-            }
-          />
-        </Routes>
-        <Footer />
-      </BrowserRouter>
+      <CartProvider>
+        <BrowserRouter>
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route
+              path="/customize"
+              element={
+                <ProtectedRoute>
+                  <Customize />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/checkout"
+              element={
+                <ProtectedRoute>
+                  <Checkout />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+          <Footer />
+        </BrowserRouter>
+      </CartProvider>
     </AuthProvider>
   );
 }

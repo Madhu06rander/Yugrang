@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { FiMenu, FiX, FiUser, FiLogOut } from 'react-icons/fi';
+import { FiMenu, FiX, FiUser, FiLogOut, FiShoppingCart } from 'react-icons/fi';
+import { useCart } from '../context/CartContext';
 
 export default function Navbar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
+  const { totalItems } = useCart();
 
   const handleLogout = () => {
     logout();
@@ -145,6 +147,31 @@ export default function Navbar() {
   background: rgba(201,168,76,0.15);
   margin: 4px 0;
 }
+
+.cart-icon-wrap {
+  position: relative;
+  cursor: pointer;
+  color: #888;
+  transition: color 0.2s;
+  display: flex;
+  align-items: center;
+}
+.cart-icon-wrap:hover { color: #C9A84C; }
+.cart-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #C9A84C;
+  color: #0A0A0A;
+  font-size: 9px;
+  font-weight: 700;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
         @media (max-width: 768px) {
           .navbar { padding: 0 24px; }
           .nav-links { display: none; }
@@ -166,6 +193,14 @@ export default function Navbar() {
 
         {/* DESKTOP RIGHT */}
         <div className="nav-right">
+
+          {/* CART ICON */}
+          <div className="cart-icon-wrap" onClick={() => navigate('/cart')}>
+            <FiShoppingCart size={20} />
+            {totalItems > 0 && (
+              <span className="cart-badge">{totalItems}</span>
+            )}
+          </div>
           {user ? (
             <>
               <span className="nav-username">
