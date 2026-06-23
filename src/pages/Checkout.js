@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
+import { orderAPI } from '../api';
 import { FiUser, FiPhone, FiMapPin, FiCheck, FiArrowLeft } from 'react-icons/fi';
 
 export default function Checkout() {
@@ -10,7 +11,6 @@ export default function Checkout() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Buy Now se aaya item ya Cart se aaya items
   const buyNowItem = location.state?.item || null;
   const cartItems = location.state?.cartItems || [];
   const items = buyNowItem ? [buyNowItem] : cartItems;
@@ -26,8 +26,9 @@ export default function Checkout() {
     paymentMethod: '',
   });
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
-  const [orderId] = useState('LT' + Date.now().toString().slice(-6));
+  const [orderId, setOrderId] = useState('');
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -55,20 +56,40 @@ export default function Checkout() {
     setStep(step + 1);
   };
 
-  const placeOrder = () => {
-    const order = {
-      orderId,
-      items,
-      totalPrice,
-      ...form,
-      user: user?.email,
-      date: new Date().toLocaleDateString('en-IN'),
-    };
-    const orders = JSON.parse(localStorage.getItem('luxethread_orders')) || [];
-    orders.push(order);
-    localStorage.setItem('luxethread_orders', JSON.stringify(orders));
-    if (!buyNowItem) clearCart();
-    setOrderPlaced(true);
+  const placeOrder = async () => {
+    setLoading(true);
+    try {
+      const orderData = {
+        name: form.name,
+        phone: form.phone,
+        address: form.address,
+        city: form.city,
+        pincode: form.pincode,
+        payment_method: form.paymentMethod,
+        total_price: totalPrice,
+        items: items.map(item => ({
+          product_name: item.name,
+          category: item.category || '',
+          size: item.size || '',
+          color: item.color || '',
+          quantity: item.quantity || 1,
+          price: item.price
+        }))
+      };
+
+      const result = await orderAPI.placeOrder(orderData);
+
+      if (result.success) {
+        setOrderId(result.order_id);
+        if (!buyNowItem) clearCart();
+        setOrderPlaced(true);
+      } else {
+        setError(result.detail || 'Order failed! Please try again.');
+      }
+    } catch (error) {
+      setError('Server error! Please try again.');
+    }
+    setLoading(false);
   };
 
   // SUCCESS SCREEN
@@ -189,7 +210,6 @@ export default function Checkout() {
           gap: 40px;
           align-items: start;
         }
-        .checkout-left {}
         .back-btn {
           display: flex;
           align-items: center;
@@ -207,8 +227,6 @@ export default function Checkout() {
           padding: 0;
         }
         .back-btn:hover { color: #C9A84C; }
-
-        /* STEPPER */
         .stepper {
           display: flex;
           align-items: center;
@@ -254,8 +272,6 @@ export default function Checkout() {
           margin: 0 12px;
         }
         .step-connector.done { background: #C9A84C; }
-
-        /* FORM */
         .checkout-form {
           background: #111;
           border: 1px solid rgba(201,168,76,0.15);
@@ -297,8 +313,6 @@ export default function Checkout() {
           pointer-events: none;
         }
         .input-pl { padding-left: 44px !important; }
-
-        /* PAYMENT */
         .payment-grid {
           display: grid;
           grid-template-columns: 1fr 1fr;
@@ -324,8 +338,6 @@ export default function Checkout() {
           margin-bottom: 4px;
         }
         .pay-sub { font-size: 11px; color: #888; }
-
-        /* STEP ACTIONS */
         .step-actions {
           display: flex;
           gap: 12px;
@@ -347,8 +359,6 @@ export default function Checkout() {
           border-color: #C9A84C;
           color: #C9A84C;
         }
-
-        /* ORDER SUMMARY BOX */
         .order-summary-box {
           background: #111;
           border: 1px solid rgba(201,168,76,0.15);
@@ -429,7 +439,6 @@ export default function Checkout() {
           font-size: 30px;
           color: #C9A84C;
         }
-
         @media (max-width: 900px) {
           .checkout-page {
             grid-template-columns: 1fr;
@@ -442,8 +451,7 @@ export default function Checkout() {
       `}</style>
 
       <div className="checkout-page">
-        {/* LEFT — FORM */}
-        <div className="checkout-left">
+        <div>
           <button className="back-btn" onClick={() => navigate(-1)}>
             <FiArrowLeft size={14} /> Back
           </button>
@@ -472,7 +480,6 @@ export default function Checkout() {
               <>
                 <h2 className="form-title">Delivery <em>Details</em></h2>
                 <p className="form-sub">Where should we deliver your order?</p>
-
                 <div className="form-row">
                   <div className="form-group">
                     <label className="form-label">Full Name *</label>
@@ -502,7 +509,6 @@ export default function Checkout() {
                     </div>
                   </div>
                 </div>
-
                 <div className="form-group">
                   <label className="form-label">Full Address *</label>
                   <div className="input-wrap">
@@ -516,7 +522,6 @@ export default function Checkout() {
                     />
                   </div>
                 </div>
-
                 <div className="form-row">
                   <div className="form-group">
                     <label className="form-label">City *</label>
@@ -548,7 +553,6 @@ export default function Checkout() {
               <>
                 <h2 className="form-title">Choose <em>Payment</em></h2>
                 <p className="form-sub">Select your preferred payment method.</p>
-
                 <div className="payment-grid">
                   <div
                     className={`pay-card ${form.paymentMethod === 'cod' ? 'active' : ''}`}
@@ -589,7 +593,10 @@ export default function Checkout() {
             {/* BUTTONS */}
             <div className="step-actions">
               {step > 1 && (
-                <button className="btn-back-step" onClick={() => { setError(''); setStep(step - 1); }}>
+                <button
+                  className="btn-back-step"
+                  onClick={() => { setError(''); setStep(step - 1); }}
+                >
                   ← Back
                 </button>
               )}
@@ -597,14 +604,15 @@ export default function Checkout() {
                 className="btn-primary"
                 style={{ flex: 1, padding: '16px', fontSize: '11px', letterSpacing: '2px' }}
                 onClick={handleNext}
+                disabled={loading}
               >
-                {step === 2 ? '✓ Place Order' : 'Continue →'}
+                {loading ? 'Processing...' : step === 2 ? '✓ Place Order' : 'Continue →'}
               </button>
             </div>
           </div>
         </div>
 
-        {/* RIGHT — ORDER SUMMARY */}
+        {/* ORDER SUMMARY */}
         <div className="order-summary-box">
           <h3 className="summary-heading">Order Summary</h3>
           {items.map((item, i) => (

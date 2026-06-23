@@ -23,46 +23,43 @@ export default function Signup() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSignup = () => {
-    setError('');
+const handleSignup = async () => {
+  setError('');
 
-    // VALIDATIONS
-    if (!form.name || !form.email || !form.phone || !form.password || !form.confirmPassword) {
-      setError('Please fill in all fields.');
-      return;
-    }
-    if (form.name.length < 2) {
-      setError('Please enter your full name.');
-      return;
-    }
-    if (!form.email.includes('@')) {
-      setError('Please enter a valid email address.');
-      return;
-    }
-    if (form.phone.length < 10) {
-      setError('Please enter a valid 10-digit phone number.');
-      return;
-    }
-    if (form.password.length < 6) {
-      setError('Password must be at least 6 characters.');
-      return;
-    }
-    if (form.password !== form.confirmPassword) {
-      setError('Passwords do not match.');
-      return;
-    }
+  if (!form.name || !form.email || !form.phone || !form.password || !form.confirmPassword) {
+    setError('Please fill in all fields.');
+    return;
+  }
+  if (form.name.length < 2) {
+    setError('Please enter your full name.');
+    return;
+  }
+  if (!form.email.includes('@')) {
+    setError('Please enter a valid email address.');
+    return;
+  }
+  if (form.phone.length < 10) {
+    setError('Please enter a valid 10-digit phone number.');
+    return;
+  }
+  if (form.password.length < 6) {
+    setError('Password must be at least 6 characters.');
+    return;
+  }
+  if (form.password !== form.confirmPassword) {
+    setError('Passwords do not match.');
+    return;
+  }
 
-    setLoading(true);
-    setTimeout(() => {
-      const result = signup(form.name, form.email, form.password, form.phone);
-      if (result.success) {
-        navigate('/');
-      } else {
-        setError(result.message);
-      }
-      setLoading(false);
-    }, 800);
-  };
+  setLoading(true);
+  const result = await signup(form.name, form.email, form.password, form.phone);
+  if (result.success) {
+    navigate('/');
+  } else {
+    setError(result.message);
+  }
+  setLoading(false);
+};
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') handleSignup();

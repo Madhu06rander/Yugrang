@@ -1,46 +1,48 @@
 import React, { createContext, useState, useContext } from 'react';
+import { authAPI } from '../api';
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(
-    JSON.parse(localStorage.getItem('luxethread_user')) || null
+    JSON.parse(localStorage.getItem('yugrang_user')) || null
   );
 
-  const signup = (name, email, password) => {
-    const users = JSON.parse(localStorage.getItem('luxethread_users')) || [];
-    
-    const exists = users.find(u => u.email === email);
-    if (exists) {
-      return { success: false, message: 'Email already registered!' };
+  const signup = async (name, email, password, phone) => {
+    try {
+      const result = await authAPI.signup({ name, email, password, phone });
+      if (result.success) {
+        localStorage.setItem('yugrang_token', result.token);
+        localStorage.setItem('yugrang_user', JSON.stringify(result.user));
+        setUser(result.user);
+        return { success: true };
+      } else {
+        return { success: false, message: result.detail || 'Signup failed!' };
+      }
+    } catch (error) {
+      return { success: false, message: 'Server error! Please try again.' };
     }
-
-    const newUser = { name, email, password };
-    users.push(newUser);
-    localStorage.setItem('luxethread_users', JSON.stringify(users));
-    localStorage.setItem('luxethread_user', JSON.stringify(newUser));
-    setUser(newUser);
-    return { success: true };
   };
 
-  const login = (email, password) => {
-    const users = JSON.parse(localStorage.getItem('luxethread_users')) || [];
-    
-    const found = users.find(
-      u => u.email === email && u.password === password
-    );
-
-    if (found) {
-      localStorage.setItem('luxethread_user', JSON.stringify(found));
-      setUser(found);
-      return { success: true };
+  const login = async (email, password) => {
+    try {
+      const result = await authAPI.login({ email, password });
+      if (result.success) {
+        localStorage.setItem('yugrang_token', result.token);
+        localStorage.setItem('yugrang_user', JSON.stringify(result.user));
+        setUser(result.user);
+        return { success: true };
+      } else {
+        return { success: false, message: result.detail || 'Invalid email or password!' };
+      }
+    } catch (error) {
+      return { success: false, message: 'Server error! Please try again.' };
     }
-
-    return { success: false, message: 'Invalid email or password!' };
   };
 
   const logout = () => {
-    localStorage.removeItem('luxethread_user');
+    localStorage.removeItem('yugrang_token');
+    localStorage.removeItem('yugrang_user');
     setUser(null);
   };
 

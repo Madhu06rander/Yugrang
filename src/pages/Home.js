@@ -276,7 +276,7 @@ export default function Home() {
           {user && (
             <p className="hero-welcome">Welcome back, {user.name}! 👋</p>
           )}
-          <p className="hero-eyebrow">Est. 2026 · Handcrafted for You</p>
+          <p className="hero-eyebrow">Yugrang · Est. 2026 · Handcrafted for You</p>
           <h1 className="hero-title">
             Wear What<br /><em>You Imagine</em>
           </h1>

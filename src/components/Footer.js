@@ -104,10 +104,10 @@ export default function Footer() {
 
           {/* BRAND */}
           <div>
-            <div className="footer-brand">LUXE THREAD</div>
+            <div className="footer-brand">YUGRANG</div>
             <p className="footer-tagline">
-              Bespoke clothing crafted with care.<br />
-              Every stitch made with your vision in mind.
+              Yugrang — where every colour tells your story.<br />
+              Custom clothing crafted with care and passion.
             </p>
             <div className="social-row">
               <a href="#" className="social-icon"><FiInstagram size={18} /></a>
@@ -146,7 +146,7 @@ export default function Footer() {
             <ul className="footer-col-list">
               <li><span className="footer-col-link">📍 Udaipur, Rajasthan</span></li>
               <li><span className="footer-col-link">📞 +91 XXXXXXXXXX</span></li>
-              <li><span className="footer-col-link">✉️ hello@luxethread.in</span></li>
+              <li><span className="footer-col-link">✉️ hello@Yugrang.in</span></li>
               {/* <li><span className="footer-col-link">⏰ Mon–Sat, 10am–7pm</span></li> */}
             </ul>
           </div>
@@ -155,7 +155,7 @@ export default function Footer() {
 
         {/* BOTTOM BAR */}
         <div className="footer-bottom">
-          <span className="footer-copy">© 2026 Luxe Thread. All rights reserved.</span>
+          <span className="footer-copy">© 2026 Yugrang. All rights reserved.</span>
           <span className="footer-copy">Made with ❤️ in India 🇮🇳</span>
         </div>
       </footer>

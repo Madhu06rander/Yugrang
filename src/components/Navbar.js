@@ -182,7 +182,7 @@ export default function Navbar() {
 
       <nav className="navbar">
         {/* LOGO */}
-        <Link to="/" className="nav-logo">LUXE THREAD</Link>
+        <Link to="/" className="nav-logo">YUGRANG</Link>
 
         {/* DESKTOP LINKS */}
         <ul className="nav-links">

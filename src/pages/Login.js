@@ -13,30 +13,27 @@ export default function Login() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = () => {
-    setError('');
+  const handleLogin = async () => {
+  setError('');
 
-    // VALIDATION
-    if (!email || !password) {
-      setError('Please fill in all fields.');
-      return;
-    }
-    if (!email.includes('@')) {
-      setError('Please enter a valid email address.');
-      return;
-    }
+  if (!email || !password) {
+    setError('Please fill in all fields.');
+    return;
+  }
+  if (!email.includes('@')) {
+    setError('Please enter a valid email address.');
+    return;
+  }
 
-    setLoading(true);
-    setTimeout(() => {
-      const result = login(email, password);
-      if (result.success) {
-        navigate('/');
-      } else {
-        setError(result.message);
-      }
-      setLoading(false);
-    }, 800);
-  };
+  setLoading(true);
+  const result = await login(email, password);
+  if (result.success) {
+    navigate('/');
+  } else {
+    setError(result.message);
+  }
+  setLoading(false);
+};
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') handleLogin();
@@ -225,7 +222,7 @@ export default function Login() {
           <div className="corner-br"></div>
 
           <p className="auth-eyebrow">Welcome Back</p>
-          <h1 className="auth-title">Login to<br /><em>Luxe Thread</em></h1>
+          <h1 className="auth-title">Login to<br /><em>Yugrang</em></h1>
           <p className="auth-sub">
             Enter your credentials to access your account and manage your orders.
           </p>

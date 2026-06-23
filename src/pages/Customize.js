@@ -87,9 +87,9 @@ export default function Customize() {
       orderId: 'LT' + Date.now(),
       date: new Date().toLocaleDateString('en-IN'),
     };
-    const orders = JSON.parse(localStorage.getItem('luxethread_orders')) || [];
+    const orders = JSON.parse(localStorage.getItem('yugrang_orders')) || [];
     orders.push(order);
-    localStorage.setItem('luxethread_orders', JSON.stringify(orders));
+    localStorage.setItem('yugrang_orders', JSON.stringify(orders));
     setOrderPlaced(true);
   };
 
