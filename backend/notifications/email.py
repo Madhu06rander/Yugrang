@@ -1,4 +1,3 @@
-import asyncio
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -11,6 +10,7 @@ EMAIL_HOST = os.getenv("EMAIL_HOST")
 EMAIL_PORT = int(os.getenv("EMAIL_PORT"))
 EMAIL_USER = os.getenv("EMAIL_USER")
 EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
+ADMIN_EMAIL = "yugrang2026@gmail.com"
 
 def send_email(to_email: str, subject: str, html_content: str):
     try:
@@ -31,14 +31,13 @@ def send_email(to_email: str, subject: str, html_content: str):
         print(f"Email error: {e}")
         return False
 
+# ── WELCOME EMAIL ──
 async def send_welcome_email(email: str, name: str):
     subject = "Welcome to Yugrang! 🎨"
     html = f"""
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #0A0A0A; color: #F5F0E8;">
         <div style="background: #1A1A1A; padding: 40px; text-align: center; border-bottom: 2px solid #C9A84C;">
-            <h1 style="font-family: Georgia, serif; color: #C9A84C; font-size: 36px; margin: 0; letter-spacing: 4px;">
-                YUGRANG
-            </h1>
+            <h1 style="font-family: Georgia, serif; color: #C9A84C; font-size: 36px; margin: 0; letter-spacing: 4px;">YUGRANG</h1>
             <p style="color: #888; font-size: 12px; letter-spacing: 3px; text-transform: uppercase; margin-top: 8px;">
                 Where Every Colour Tells Your Story
             </p>
@@ -67,15 +66,14 @@ async def send_welcome_email(email: str, name: str):
             </p>
         </div>
         <div style="background: #1A1A1A; padding: 24px; text-align: center; border-top: 1px solid #333;">
-            <p style="color: #555; font-size: 11px; letter-spacing: 1px;">
-                © 2026 Yugrang. All rights reserved.
-            </p>
+            <p style="color: #555; font-size: 11px; letter-spacing: 1px;">© 2026 Yugrang. All rights reserved.</p>
             <p style="color: #555; font-size: 11px;">Udaipur, Rajasthan, India</p>
         </div>
     </div>
     """
-    await asyncio.to_thread(send_email, email, subject, html)
+    send_email(email, subject, html)
 
+# ── ORDER CONFIRMATION EMAIL ──
 async def send_order_confirmation_email(
     email: str, name: str, order_id: str, tracking_id: str, total_price: float
 ):
@@ -83,53 +81,32 @@ async def send_order_confirmation_email(
     html = f"""
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #0A0A0A; color: #F5F0E8;">
         <div style="background: #1A1A1A; padding: 40px; text-align: center; border-bottom: 2px solid #C9A84C;">
-            <h1 style="font-family: Georgia, serif; color: #C9A84C; font-size: 36px; margin: 0; letter-spacing: 4px;">
-                YUGRANG
-            </h1>
+            <h1 style="font-family: Georgia, serif; color: #C9A84C; font-size: 36px; margin: 0; letter-spacing: 4px;">YUGRANG</h1>
         </div>
         <div style="padding: 40px;">
-            <h2 style="color: #C9A84C; font-family: Georgia, serif; font-size: 28px;">
-                Order Confirmed! ✅
-            </h2>
+            <h2 style="color: #C9A84C; font-family: Georgia, serif; font-size: 28px;">Order Confirmed! ✅</h2>
             <p style="color: #888; line-height: 1.8; font-size: 14px;">
                 Hi {name}, aapka order successfully place ho gaya hai!
             </p>
-
             <div style="background: #1A1A1A; border: 1px solid #C9A84C; padding: 24px; margin: 24px 0;">
-                <p style="color: #C9A84C; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; margin: 0 0 8px 0;">
-                    Order ID
-                </p>
-                <p style="color: #F5F0E8; font-size: 20px; font-family: Georgia, serif; margin: 0 0 20px 0;">
-                    #{order_id}
-                </p>
+                <p style="color: #C9A84C; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; margin: 0 0 8px 0;">Order ID</p>
+                <p style="color: #F5F0E8; font-size: 20px; font-family: Georgia, serif; margin: 0 0 20px 0;">#{order_id}</p>
 
-                <p style="color: #C9A84C; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; margin: 0 0 8px 0;">
-                    🔍 Tracking ID
-                </p>
-                <p style="color: #F5F0E8; font-size: 24px; font-family: Georgia, serif; margin: 0 0 8px 0; letter-spacing: 2px;">
-                    {tracking_id}
-                </p>
-                <p style="color: #555; font-size: 11px; margin: 0 0 20px 0;">
-                    Is Tracking ID se aap apna order track kar sakte hain
-                </p>
+                <p style="color: #C9A84C; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; margin: 0 0 8px 0;">🔍 Tracking ID</p>
+                <p style="color: #F5F0E8; font-size: 24px; font-family: Georgia, serif; margin: 0 0 8px 0; letter-spacing: 2px;">{tracking_id}</p>
+                <p style="color: #555; font-size: 11px; margin: 0 0 20px 0;">Is ID se aap yugrang.com/my-orders par apna order track kar sakte hain</p>
 
                 {f'''
-                <p style="color: #C9A84C; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; margin: 0 0 8px 0;">
-                    Total Amount
-                </p>
-                <p style="color: #F5F0E8; font-size: 20px; font-family: Georgia, serif; margin: 0;">
-                    Rs.{total_price}
-                </p>
+                <p style="color: #C9A84C; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; margin: 0 0 8px 0;">Total Amount</p>
+                <p style="color: #F5F0E8; font-size: 20px; font-family: Georgia, serif; margin: 0;">Rs.{total_price}</p>
                 ''' if total_price > 0 else ''}
             </div>
-
             <p style="color: #888; line-height: 1.8; font-size: 14px;">
                 Humari team aapko 2 ghante mein WhatsApp par contact karegi.
             </p>
             <p style="color: #888; line-height: 1.8; font-size: 14px;">
                 Expected delivery: <span style="color: #C9A84C;">5-7 business days</span>
             </p>
-
             <div style="text-align: center; margin: 32px 0;">
                 <a href="https://yugrang.com/my-orders"
                    style="background: #C9A84C; color: #0A0A0A; padding: 14px 40px;
@@ -140,68 +117,13 @@ async def send_order_confirmation_email(
             </div>
         </div>
         <div style="background: #1A1A1A; padding: 24px; text-align: center; border-top: 1px solid #333;">
-            <p style="color: #555; font-size: 11px; letter-spacing: 1px;">
-                © 2026 Yugrang. All rights reserved.
-            </p>
+            <p style="color: #555; font-size: 11px; letter-spacing: 1px;">© 2026 Yugrang. All rights reserved.</p>
         </div>
     </div>
     """
     send_email(email, subject, html)
-    subject = f"Order Confirmed! #{order_id} — Yugrang"
-    html = f"""
-    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #0A0A0A; color: #F5F0E8;">
-        <div style="background: #1A1A1A; padding: 40px; text-align: center; border-bottom: 2px solid #C9A84C;">
-            <h1 style="font-family: Georgia, serif; color: #C9A84C; font-size: 36px; margin: 0; letter-spacing: 4px;">
-                YUGRANG
-            </h1>
-        </div>
-        <div style="padding: 40px;">
-            <h2 style="color: #C9A84C; font-family: Georgia, serif; font-size: 28px;">
-                Order Confirmed! ✅
-            </h2>
-            <p style="color: #888; line-height: 1.8; font-size: 14px;">
-                Hi {name}, aapka order successfully place ho gaya hai!
-            </p>
-            <div style="background: #1A1A1A; border: 1px solid #C9A84C; padding: 24px; margin: 24px 0;">
-                <p style="color: #C9A84C; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; margin: 0 0 8px 0;">
-                    Order ID
-                </p>
-                <p style="color: #F5F0E8; font-size: 20px; font-family: Georgia, serif; margin: 0;">
-                    #{order_id}
-                </p>
-                {f'''
-                <p style="color: #C9A84C; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; margin: 16px 0 8px 0;">
-                    Total Amount
-                </p>
-                <p style="color: #F5F0E8; font-size: 20px; font-family: Georgia, serif; margin: 0;">
-                    Rs.{total_price}
-                </p>
-                ''' if total_price > 0 else ''}
-            </div>
-            <p style="color: #888; line-height: 1.8; font-size: 14px;">
-                Humari team aapko 2 ghante mein WhatsApp par contact karegi.
-            </p>
-            <p style="color: #888; line-height: 1.8; font-size: 14px;">
-                Expected delivery: <span style="color: #C9A84C;">5-7 business days</span>
-            </p>
-            <div style="text-align: center; margin: 32px 0;">
-                <a href="https://yugrang.com/my-orders"
-                   style="background: #C9A84C; color: #0A0A0A; padding: 14px 40px;
-                          text-decoration: none; font-size: 12px; letter-spacing: 3px;
-                          text-transform: uppercase; font-weight: bold;">
-                    Track My Order
-                </a>
-            </div>
-        </div>
-        <div style="background: #1A1A1A; padding: 24px; text-align: center; border-top: 1px solid #333;">
-            <p style="color: #555; font-size: 11px; letter-spacing: 1px;">
-                © 2026 Yugrang. All rights reserved.
-            </p>
-        </div>
-    </div>
-    """
-    await asyncio.to_thread(send_email, email, subject, html)
 
+# ── STATUS UPDATE EMAIL ──
 async def send_status_update_email(
     email: str, name: str, order_id: str, status: str
 ):
@@ -222,33 +144,17 @@ async def send_status_update_email(
     html = f"""
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #0A0A0A; color: #F5F0E8;">
         <div style="background: #1A1A1A; padding: 40px; text-align: center; border-bottom: 2px solid #C9A84C;">
-            <h1 style="font-family: Georgia, serif; color: #C9A84C; font-size: 36px; margin: 0; letter-spacing: 4px;">
-                YUGRANG
-            </h1>
+            <h1 style="font-family: Georgia, serif; color: #C9A84C; font-size: 36px; margin: 0; letter-spacing: 4px;">YUGRANG</h1>
         </div>
         <div style="padding: 40px;">
-            <h2 style="color: #C9A84C; font-family: Georgia, serif; font-size: 28px;">
-                {title}
-            </h2>
-            <p style="color: #888; line-height: 1.8; font-size: 14px;">
-                Namaste {name}! 🙏
-            </p>
-            <p style="color: #888; line-height: 1.8; font-size: 14px;">
-                {message}
-            </p>
+            <h2 style="color: #C9A84C; font-family: Georgia, serif; font-size: 28px;">{title}</h2>
+            <p style="color: #888; line-height: 1.8; font-size: 14px;">Namaste {name}! 🙏</p>
+            <p style="color: #888; line-height: 1.8; font-size: 14px;">{message}</p>
             <div style="background: #1A1A1A; border: 1px solid #C9A84C; padding: 24px; margin: 24px 0;">
-                <p style="color: #C9A84C; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; margin: 0 0 8px 0;">
-                    Order ID
-                </p>
-                <p style="color: #F5F0E8; font-size: 20px; font-family: Georgia, serif; margin: 0 0 16px 0;">
-                    #{order_id}
-                </p>
-                <p style="color: #C9A84C; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; margin: 0 0 8px 0;">
-                    Current Status
-                </p>
-                <p style="color: #F5F0E8; font-size: 20px; font-family: Georgia, serif; margin: 0;">
-                    {status}
-                </p>
+                <p style="color: #C9A84C; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; margin: 0 0 8px 0;">Order ID</p>
+                <p style="color: #F5F0E8; font-size: 20px; font-family: Georgia, serif; margin: 0 0 16px 0;">#{order_id}</p>
+                <p style="color: #C9A84C; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; margin: 0 0 8px 0;">Current Status</p>
+                <p style="color: #F5F0E8; font-size: 20px; font-family: Georgia, serif; margin: 0;">{status}</p>
             </div>
             <div style="text-align: center; margin: 32px 0;">
                 <a href="https://yugrang.com/my-orders"
@@ -259,15 +165,79 @@ async def send_status_update_email(
                 </a>
             </div>
             <p style="color: #888; font-size: 12px; line-height: 1.8;">
-                Koi sawaal? Humse contact karo:
+                Koi sawaal?
                 <a href="mailto:yugrang2026@gmail.com" style="color: #C9A84C;">yugrang2026@gmail.com</a>
             </p>
         </div>
         <div style="background: #1A1A1A; padding: 24px; text-align: center; border-top: 1px solid #333;">
-            <p style="color: #555; font-size: 11px; letter-spacing: 1px;">
-                © 2026 Yugrang. All rights reserved.
-            </p>
+            <p style="color: #555; font-size: 11px; letter-spacing: 1px;">© 2026 Yugrang. All rights reserved.</p>
         </div>
     </div>
     """
-    await asyncio.to_thread(send_email, email, subject, html)
+    send_email(email, subject, html)
+
+# ── ADMIN DELIVERY NOTIFICATION ──
+async def send_admin_delivery_notification(
+    order_id: str, customer_name: str,
+    customer_phone: str, total_price: float,
+    payment_method: str
+):
+    subject = f"✅ Order Delivered! #{order_id} — Yugrang"
+    cod_note = ""
+    if payment_method == "cod":
+        cod_note = """
+        <div style="background: rgba(255,165,0,0.1); border: 2px solid #FFA500; padding: 20px; margin: 20px 0; text-align: center;">
+            <p style="color: #FFA500; font-size: 16px; font-weight: bold; margin: 0;">
+                💵 COD ORDER — Payment Collection Confirm Karo!
+            </p>
+            <p style="color: #888; font-size: 13px; margin: 8px 0 0 0;">
+                Customer se cash collect karke system mein update karo.
+            </p>
+        </div>
+        """
+
+    html = f"""
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #0A0A0A; color: #F5F0E8;">
+        <div style="background: #1A1A1A; padding: 40px; text-align: center; border-bottom: 2px solid #C9A84C;">
+            <h1 style="font-family: Georgia, serif; color: #C9A84C; font-size: 36px; margin: 0; letter-spacing: 4px;">YUGRANG</h1>
+            <p style="color: #888; font-size: 12px; letter-spacing: 2px; margin-top: 8px;">Admin Notification</p>
+        </div>
+        <div style="padding: 40px;">
+            <h2 style="color: #4CAF50; font-family: Georgia, serif; font-size: 28px;">✅ Order Delivered!</h2>
+            <p style="color: #888; line-height: 1.8; font-size: 14px;">
+                Ek order successfully deliver ho gaya hai!
+            </p>
+
+            {cod_note}
+
+            <div style="background: #1A1A1A; border: 1px solid #C9A84C; padding: 24px; margin: 24px 0;">
+                <p style="color: #C9A84C; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; margin: 0 0 8px 0;">Order ID</p>
+                <p style="color: #F5F0E8; font-size: 20px; font-family: Georgia, serif; margin: 0 0 16px 0;">#{order_id}</p>
+
+                <p style="color: #C9A84C; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; margin: 0 0 8px 0;">Customer</p>
+                <p style="color: #F5F0E8; font-size: 16px; margin: 0 0 16px 0;">{customer_name} — {customer_phone}</p>
+
+                <p style="color: #C9A84C; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; margin: 0 0 8px 0;">Amount</p>
+                <p style="color: #F5F0E8; font-size: 20px; font-family: Georgia, serif; margin: 0 0 16px 0;">₹{total_price}</p>
+
+                <p style="color: #C9A84C; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; margin: 0 0 8px 0;">Payment Method</p>
+                <p style="color: {'#FFA500' if payment_method == 'cod' else '#4CAF50'}; font-size: 16px; font-weight: bold; margin: 0;">
+                    {'💵 Cash on Delivery' if payment_method == 'cod' else '✅ Online Payment'}
+                </p>
+            </div>
+
+            <div style="text-align: center; margin: 32px 0;">
+                <a href="https://yugrang.com/admin"
+                   style="background: #C9A84C; color: #0A0A0A; padding: 14px 40px;
+                          text-decoration: none; font-size: 12px; letter-spacing: 3px;
+                          text-transform: uppercase; font-weight: bold;">
+                    View Admin Panel
+                </a>
+            </div>
+        </div>
+        <div style="background: #1A1A1A; padding: 24px; text-align: center; border-top: 1px solid #333;">
+            <p style="color: #555; font-size: 11px; letter-spacing: 1px;">© 2026 Yugrang. All rights reserved.</p>
+        </div>
+    </div>
+    """
+    send_email(ADMIN_EMAIL, subject, html)

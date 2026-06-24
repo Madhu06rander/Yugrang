@@ -3,8 +3,8 @@ from database import get_db, get_cursor
 from models import PlaceOrder, CustomOrder
 from auth import verify_token
 from notifications.email import send_order_confirmation_email
+from shiprocket import create_shipment
 import uuid
-from datetime import datetime
 
 router = APIRouter()
 
@@ -64,6 +64,25 @@ async def place_order(
         ))
 
     db.commit()
+
+    # Shiprocket mein order create karo
+    try:
+        shipment = create_shipment(
+            order_id=order_id,
+            tracking_id=tracking_id,
+            customer_name=order.name,
+            customer_phone=order.phone,
+            customer_address=order.address,
+            customer_city=order.city,
+            customer_pincode=order.pincode,
+            items=[item.dict() for item in order.items],
+            total_price=order.total_price,
+            payment_method=order.payment_method
+        )
+        if shipment:
+            print(f"Shiprocket shipment created for order {order_id}")
+    except Exception as e:
+        print(f"Shiprocket error: {e}")
 
     # Send email in background
     background_tasks.add_task(
