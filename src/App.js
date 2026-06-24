@@ -6,6 +6,7 @@ import { CartProvider } from './context/CartContext';
 import Admin from './pages/Admin';
 
 
+
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 
@@ -16,6 +17,7 @@ import Products from './pages/Products';
 import Customize from './pages/Customize';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
+import MyOrders from './pages/MyOrders';
 
 import './styles/global.css';
 
@@ -41,6 +43,7 @@ function App() {
             <Route path="/products" element={<Products />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/admin" element={<Admin />} />
+            <Route path="/my-orders" element={<ProtectedRoute><MyOrders /></ProtectedRoute>} />
             <Route
               path="/customize"
               element={

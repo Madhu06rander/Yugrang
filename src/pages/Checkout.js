@@ -29,6 +29,7 @@ export default function Checkout() {
   const [loading, setLoading] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [orderId, setOrderId] = useState('');
+  const [trackingId, setTrackingId] = useState('');
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -81,6 +82,7 @@ export default function Checkout() {
 
       if (result.success) {
         setOrderId(result.order_id);
+        setTrackingId(result.tracking_id);
         if (!buyNowItem) clearCart();
         setOrderPlaced(true);
       } else {
@@ -107,7 +109,7 @@ export default function Checkout() {
             text-align: center;
           }
           .success-card {
-            max-width: 500px;
+            max-width: 520px;
             width: 100%;
             border: 1px solid rgba(201,168,76,0.25);
             padding: 60px 48px;
@@ -161,13 +163,43 @@ export default function Checkout() {
             font-size: 13px;
             color: #C9A84C;
             letter-spacing: 2px;
+            margin-bottom: 16px;
+          }
+          .tracking-id-box {
+            background: rgba(201,168,76,0.04);
+            border: 1px solid rgba(201,168,76,0.15);
+            padding: 20px;
             margin-bottom: 32px;
+            text-align: left;
+          }
+          .tracking-id-label {
+            font-size: 9px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #C9A84C;
+            margin-bottom: 8px;
+          }
+          .tracking-id-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 22px;
+            color: #F5F0E8;
+            letter-spacing: 2px;
+            margin-bottom: 6px;
+          }
+          .tracking-id-hint {
+            font-size: 11px;
+            color: #555;
+            letter-spacing: 0.5px;
           }
           .success-actions {
             display: flex;
             gap: 12px;
             justify-content: center;
             flex-wrap: wrap;
+          }
+          @media (max-width: 520px) {
+            .success-card { padding: 40px 24px; }
+            .success-title { font-size: 32px; }
           }
         `}</style>
         <div className="success-page">
@@ -180,13 +212,47 @@ export default function Checkout() {
             <h2 className="success-title">Order <em>Placed!</em></h2>
             <p className="success-sub">
               Thank you, {user?.name}! 🎉<br />
-              Your order has been placed successfully.<br />
-              Our team will contact you on WhatsApp within 2 hours.
+              Aapka order successfully place ho gaya hai.<br />
+              Humari team 2 ghante mein WhatsApp par contact karegi.
             </p>
-            <div className="order-id-box">Order ID: {orderId}</div>
+
+            <div className="order-id-box">
+              📦 Order ID: {orderId}
+            </div>
+
+            {trackingId && (
+              <div className="tracking-id-box">
+                <p className="tracking-id-label">🔍 Your Tracking ID</p>
+                <p className="tracking-id-value">{trackingId}</p>
+                <p className="tracking-id-hint">
+                  Is ID se aap My Orders mein apna order track kar sakte hain
+                </p>
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(trackingId);
+                    alert('Tracking ID copied!');
+                  }}
+                  style={{
+                    marginTop: '10px',
+                    background: 'transparent',
+                    border: '1px solid rgba(201,168,76,0.3)',
+                    color: '#C9A84C',
+                    padding: '6px 16px',
+                    fontSize: '10px',
+                    letterSpacing: '2px',
+                    textTransform: 'uppercase',
+                    cursor: 'pointer',
+                    fontFamily: "'Jost', sans-serif",
+                  }}
+                >
+                  Copy Tracking ID
+                </button>
+              </div>
+            )}
+
             <div className="success-actions">
-              <button className="btn-primary" onClick={() => navigate('/')}>
-                Back to Home
+              <button className="btn-primary" onClick={() => navigate('/my-orders')}>
+                Track My Order
               </button>
               <button className="btn-outline" onClick={() => navigate('/products')}>
                 Shop More
@@ -355,10 +421,7 @@ export default function Checkout() {
           font-family: 'Jost', sans-serif;
           transition: all 0.2s;
         }
-        .btn-back-step:hover {
-          border-color: #C9A84C;
-          color: #C9A84C;
-        }
+        .btn-back-step:hover { border-color: #C9A84C; color: #C9A84C; }
         .order-summary-box {
           background: #111;
           border: 1px solid rgba(201,168,76,0.15);
@@ -380,35 +443,19 @@ export default function Checkout() {
           border-bottom: 1px solid rgba(201,168,76,0.08);
         }
         .summary-item-img {
-          width: 60px;
-          height: 60px;
-          object-fit: cover;
-          flex-shrink: 0;
+          width: 60px; height: 60px;
+          object-fit: cover; flex-shrink: 0;
         }
         .summary-item-emoji {
-          width: 60px;
-          height: 60px;
+          width: 60px; height: 60px;
           background: #1a1a1a;
-          display: flex;
-          align-items: center;
+          display: flex; align-items: center;
           justify-content: center;
-          font-size: 28px;
-          flex-shrink: 0;
+          font-size: 28px; flex-shrink: 0;
         }
-        .summary-item-name {
-          font-size: 13px;
-          color: #F5F0E8;
-          margin-bottom: 4px;
-        }
-        .summary-item-details {
-          font-size: 11px;
-          color: #888;
-          margin-bottom: 4px;
-        }
-        .summary-item-price {
-          font-size: 13px;
-          color: #C9A84C;
-        }
+        .summary-item-name { font-size: 13px; color: #F5F0E8; margin-bottom: 4px; }
+        .summary-item-details { font-size: 11px; color: #888; margin-bottom: 4px; }
+        .summary-item-price { font-size: 13px; color: #C9A84C; }
         .summary-divider {
           height: 1px;
           background: rgba(201,168,76,0.15);
@@ -417,8 +464,7 @@ export default function Checkout() {
         .summary-row {
           display: flex;
           justify-content: space-between;
-          font-size: 12px;
-          color: #888;
+          font-size: 12px; color: #888;
           margin-bottom: 10px;
         }
         .summary-row span:last-child { color: #F5F0E8; }
@@ -436,8 +482,7 @@ export default function Checkout() {
         }
         .total-price {
           font-family: 'Cormorant Garamond', serif;
-          font-size: 30px;
-          color: #C9A84C;
+          font-size: 30px; color: #C9A84C;
         }
         @media (max-width: 900px) {
           .checkout-page {

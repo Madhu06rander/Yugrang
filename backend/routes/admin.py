@@ -1,7 +1,8 @@
-from fastapi import APIRouter, Depends, HTTPException, Header
+from fastapi import APIRouter, Depends, HTTPException, Header, BackgroundTasks
 from database import get_db, get_cursor
 from models import Product, UpdateOrderStatus
 from auth import verify_token
+from notifications.email import send_status_update_email
 
 router = APIRouter()
 
@@ -56,19 +57,42 @@ async def get_all_custom_orders(authorization: str = Header(None), db=Depends(ge
 @router.put("/orders/status")
 async def update_order_status(
     data: UpdateOrderStatus,
+    background_tasks: BackgroundTasks,
     authorization: str = Header(None),
     db=Depends(get_db)
 ):
     verify_admin(authorization, db)
     cursor = get_cursor(db)
+
+    # Get order details
+    cursor.execute("""
+        SELECT o.*, u.email, u.name as customer_name
+        FROM orders o
+        LEFT JOIN users u ON o.user_id = u.id
+        WHERE o.order_id = %s
+    """, (data.order_id,))
+    order = cursor.fetchone()
+
+    # Update status immediately
     cursor.execute(
         "UPDATE orders SET status = %s WHERE order_id = %s",
         (data.status, data.order_id)
     )
     db.commit()
+
+    # Send email in background
+    if order and order.get('email'):
+        background_tasks.add_task(
+            send_status_update_email,
+            order['email'],
+            order['customer_name'],
+            data.order_id,
+            data.status
+        )
+
     return {
         "success": True,
-        "message": f"Order {data.order_id} status updated to {data.status}"
+        "message": f"Order {data.order_id} updated to {data.status}"
     }
 
 # ── GET ALL CUSTOMERS ──
@@ -160,13 +184,19 @@ async def get_dashboard_stats(authorization: str = Header(None), db=Depends(get_
     cursor.execute("SELECT COUNT(*) as total FROM orders")
     total_orders = cursor.fetchone()["total"]
 
-    cursor.execute("SELECT SUM(total_price) as total FROM orders WHERE status != 'Cancelled'")
+    cursor.execute(
+        "SELECT SUM(total_price) as total FROM orders WHERE status != 'Cancelled'"
+    )
     total_revenue = cursor.fetchone()["total"] or 0
 
-    cursor.execute("SELECT COUNT(*) as total FROM orders WHERE status = 'Pending'")
+    cursor.execute(
+        "SELECT COUNT(*) as total FROM orders WHERE status = 'Pending'"
+    )
     pending_orders = cursor.fetchone()["total"]
 
-    cursor.execute("SELECT COUNT(*) as total FROM custom_orders WHERE status = 'Pending'")
+    cursor.execute(
+        "SELECT COUNT(*) as total FROM custom_orders WHERE status = 'Pending'"
+    )
     pending_custom = cursor.fetchone()["total"]
 
     cursor.execute("""

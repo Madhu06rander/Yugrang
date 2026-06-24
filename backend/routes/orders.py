@@ -1,9 +1,8 @@
-from fastapi import APIRouter, Depends, HTTPException, Header
+from fastapi import APIRouter, Depends, HTTPException, Header, BackgroundTasks
 from database import get_db, get_cursor
 from models import PlaceOrder, CustomOrder
 from auth import verify_token
 from notifications.email import send_order_confirmation_email
-from notifications.whatsapp import send_whatsapp_notification
 import uuid
 from datetime import datetime
 
@@ -23,22 +22,32 @@ def get_current_user(authorization: str, db):
         raise HTTPException(status_code=404, detail="User not found!")
     return user
 
+def generate_tracking_id():
+    return "YUG" + str(uuid.uuid4())[:10].upper().replace("-", "")
+
 # ── PLACE ORDER ──
 @router.post("/place")
-async def place_order(order: PlaceOrder, authorization: str = Header(None), db=Depends(get_db)):
+async def place_order(
+    order: PlaceOrder,
+    background_tasks: BackgroundTasks,
+    authorization: str = Header(None),
+    db=Depends(get_db)
+):
     user = get_current_user(authorization, db)
     cursor = get_cursor(db)
 
-    # Generate order ID
+    # Generate IDs
     order_id = "YUG" + str(uuid.uuid4())[:8].upper()
+    tracking_id = generate_tracking_id()
 
     # Insert order
     cursor.execute("""
-        INSERT INTO orders 
-        (order_id, user_id, name, phone, address, city, pincode, payment_method, total_price, status)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        INSERT INTO orders
+        (order_id, tracking_id, user_id, name, phone, address, city,
+        pincode, payment_method, total_price, status)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
     """, (
-        order_id, user["id"], order.name, order.phone,
+        order_id, tracking_id, user["id"], order.name, order.phone,
         order.address, order.city, order.pincode,
         order.payment_method, order.total_price, "Pending"
     ))
@@ -46,7 +55,7 @@ async def place_order(order: PlaceOrder, authorization: str = Header(None), db=D
     # Insert order items
     for item in order.items:
         cursor.execute("""
-            INSERT INTO order_items 
+            INSERT INTO order_items
             (order_id, product_name, category, size, color, quantity, price)
             VALUES (%s, %s, %s, %s, %s, %s, %s)
         """, (
@@ -56,45 +65,45 @@ async def place_order(order: PlaceOrder, authorization: str = Header(None), db=D
 
     db.commit()
 
-    # Send notifications
-    try:
-        await send_order_confirmation_email(
-            user["email"], user["name"], order_id, order.total_price
-        )
-    except:
-        pass
-
-    try:
-        await send_whatsapp_notification(
-            user["name"], order_id, order.total_price,
-            order.phone, order.payment_method
-        )
-    except:
-        pass
+    # Send email in background
+    background_tasks.add_task(
+        send_order_confirmation_email,
+        user["email"],
+        user["name"],
+        order_id,
+        tracking_id,
+        order.total_price
+    )
 
     return {
         "success": True,
         "message": "Order placed successfully!",
-        "order_id": order_id
+        "order_id": order_id,
+        "tracking_id": tracking_id
     }
 
 # ── PLACE CUSTOM ORDER ──
 @router.post("/custom")
-async def place_custom_order(order: CustomOrder, authorization: str = Header(None), db=Depends(get_db)):
+async def place_custom_order(
+    order: CustomOrder,
+    background_tasks: BackgroundTasks,
+    authorization: str = Header(None),
+    db=Depends(get_db)
+):
     user = get_current_user(authorization, db)
     cursor = get_cursor(db)
 
-    # Generate order ID
     order_id = "YUGC" + str(uuid.uuid4())[:8].upper()
+    tracking_id = generate_tracking_id()
 
-    # Insert custom order
     cursor.execute("""
         INSERT INTO custom_orders
-        (order_id, user_id, garment, size, color, custom_text, placement,
-        quantity, notes, payment_method, name, phone, address, city, pincode, status)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        (order_id, tracking_id, user_id, garment, size, color, custom_text,
+        placement, quantity, notes, payment_method, name, phone,
+        address, city, pincode, status)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
     """, (
-        order_id, user["id"], order.garment, order.size,
+        order_id, tracking_id, user["id"], order.garment, order.size,
         order.color, order.custom_text, order.placement,
         order.quantity, order.notes, order.payment_method,
         order.name, order.phone, order.address,
@@ -103,31 +112,29 @@ async def place_custom_order(order: CustomOrder, authorization: str = Header(Non
 
     db.commit()
 
-    # Send notifications
-    try:
-        await send_order_confirmation_email(
-            user["email"], user["name"], order_id, 0
-        )
-    except:
-        pass
-
-    try:
-        await send_whatsapp_notification(
-            user["name"], order_id, 0,
-            order.phone, order.payment_method
-        )
-    except:
-        pass
+    background_tasks.add_task(
+        send_order_confirmation_email,
+        user["email"],
+        user["name"],
+        order_id,
+        tracking_id,
+        0
+    )
 
     return {
         "success": True,
         "message": "Custom order placed successfully!",
-        "order_id": order_id
+        "order_id": order_id,
+        "tracking_id": tracking_id
     }
 
 # ── GET ORDER BY ID ──
 @router.get("/{order_id}")
-async def get_order(order_id: str, authorization: str = Header(None), db=Depends(get_db)):
+async def get_order(
+    order_id: str,
+    authorization: str = Header(None),
+    db=Depends(get_db)
+):
     user = get_current_user(authorization, db)
     cursor = get_cursor(db)
 
@@ -150,7 +157,11 @@ async def get_order(order_id: str, authorization: str = Header(None), db=Depends
 
 # ── CANCEL ORDER ──
 @router.put("/cancel/{order_id}")
-async def cancel_order(order_id: str, authorization: str = Header(None), db=Depends(get_db)):
+async def cancel_order(
+    order_id: str,
+    authorization: str = Header(None),
+    db=Depends(get_db)
+):
     user = get_current_user(authorization, db)
     cursor = get_cursor(db)
 
@@ -175,7 +186,4 @@ async def cancel_order(order_id: str, authorization: str = Header(None), db=Depe
     )
     db.commit()
 
-    return {
-        "success": True,
-        "message": "Order cancelled successfully!"
-    }
+    return {"success": True, "message": "Order cancelled successfully!"}

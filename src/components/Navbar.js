@@ -207,6 +207,14 @@ export default function Navbar() {
                 <FiUser size={14} />
                 {user.name}
               </span>
+              <Link to="/my-orders" className="nav-link" style={{ color: '#888' }}>
+                My Orders
+              </Link>
+              {user && user.email === 'yugrang2026@gmail.com' && (
+  <Link to="/admin" className="nav-link" style={{ color: '#C9A84C' }}>
+    Admin
+  </Link>
+)}
               <button className="nav-logout-btn" onClick={handleLogout}>
                 <FiLogOut size={14} />
                 Logout
