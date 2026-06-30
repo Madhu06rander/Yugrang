@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { FiMenu, FiX, FiUser, FiLogOut, FiShoppingCart } from 'react-icons/fi';
 import { useCart } from '../context/CartContext';
+import logo from '../assets/Logo.png';
 
 export default function Navbar() {
   const { user, logout } = useAuth();
@@ -24,7 +25,7 @@ export default function Navbar() {
           top: 0; left: 0; right: 0;
           z-index: 999;
           padding: 0 60px;
-          height: 80px;
+          height: 90px;
           display: flex;
           align-items: center;
           justify-content: space-between;
@@ -33,12 +34,19 @@ export default function Navbar() {
           background: rgba(10,10,10,0.95);
         }
         .nav-logo {
-          font-family: 'Cormorant Garamond', serif;
-          font-size: 22px;
-          font-weight: 600;
-          letter-spacing: 6px;
-          color: #C9A84C;
           text-decoration: none;
+          display: flex;
+          align-items: center;
+        }
+        .nav-logo img {
+  height: 72px;
+  width: auto;
+  object-fit: contain;
+  filter: brightness(1.4) contrast(1.3) saturate(0.7) sepia(0.3) hue-rotate(-8deg) drop-shadow(0 0 10px rgba(201,168,76,0.4));
+  transition: filter 0.3s;
+}
+        .nav-logo img:hover {
+          filter: brightness(1.5) contrast(1.15) drop-shadow(0 0 12px rgba(201,168,76,0.5));
         }
         .nav-links {
           display: flex;
@@ -68,25 +76,25 @@ export default function Navbar() {
           gap: 6px;
         }
         .nav-logout-btn {
-         background: rgba(201,168,76,0.12);
-         border: 1px solid rgba(201,168,76,0.6);
-         color: #C9A84C;
-         padding: 8px 18px;
-         font-size: 10px;
-         letter-spacing: 2px;
-         text-transform: uppercase;
-         cursor: pointer;
-         font-family: 'Jost', sans-serif;
-         display: flex;
-         align-items: center;
+          background: rgba(201,168,76,0.12);
+          border: 1px solid rgba(201,168,76,0.6);
+          color: #C9A84C;
+          padding: 8px 18px;
+          font-size: 10px;
+          letter-spacing: 2px;
+          text-transform: uppercase;
+          cursor: pointer;
+          font-family: 'Jost', sans-serif;
+          display: flex;
+          align-items: center;
           gap: 6px;
-         transition: all 0.3s;
-      }
+          transition: all 0.3s;
+        }
         .nav-logout-btn:hover {
-         background: #C9A84C;
-         border-color: #C9A84C;
-         color: #0A0A0A;
-     }
+          background: #C9A84C;
+          border-color: #C9A84C;
+          color: #0A0A0A;
+        }
         .nav-signup-btn {
           background: #C9A84C;
           color: #0A0A0A;
@@ -108,81 +116,102 @@ export default function Navbar() {
           padding: 4px;
         }
         .mobile-menu {
-  position: fixed;
-  top: 80px;
-  right: 0;
-  width: 240px;
-  height: auto;
-  max-height: fit-content;
-  background: rgba(15,15,15,0.98);
-  border: 1px solid rgba(201,168,76,0.2);
-  border-top: none;
-  display: flex;
-  flex-direction: column;
-  padding: 16px 0;
-  gap: 0;
-  z-index: 998;
-  backdrop-filter: blur(12px);
-  box-shadow: -4px 4px 24px rgba(0,0,0,0.6);
-}
+          position: fixed;
+          top: 90px;
+          right: 0;
+          width: 240px;
+          height: auto;
+          max-height: fit-content;
+          background: rgba(15,15,15,0.98);
+          border: 1px solid rgba(201,168,76,0.2);
+          border-top: none;
+          display: flex;
+          flex-direction: column;
+          padding: 16px 0;
+          gap: 0;
+          z-index: 998;
+          backdrop-filter: blur(12px);
+          box-shadow: -4px 4px 24px rgba(0,0,0,0.6);
+        }
         .mobile-link {
-  font-size: 11px;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: #C9A84C;
-  text-decoration: none;
-  transition: all 0.2s;
-  padding: 12px 24px;
-  border-bottom: 1px solid rgba(201,168,76,0.08);
-  display: block;
-}
-.mobile-link:hover {
-  background: rgba(201,168,76,0.08);
-  color: #E8D5A3;
-  padding-left: 32px;
-}
+          font-size: 11px;
+          letter-spacing: 3px;
+          text-transform: uppercase;
+          color: #C9A84C;
+          text-decoration: none;
+          transition: all 0.2s;
+          padding: 12px 24px;
+          border-bottom: 1px solid rgba(201,168,76,0.08);
+          display: block;
+        }
+        .mobile-link:hover {
+          background: rgba(201,168,76,0.08);
+          color: #E8D5A3;
+          padding-left: 32px;
+        }
         .mobile-divider {
-  width: 100%;
-  height: 1px;
-  background: rgba(201,168,76,0.15);
-  margin: 4px 0;
-}
-
-.cart-icon-wrap {
-  position: relative;
-  cursor: pointer;
-  color: #888;
-  transition: color 0.2s;
-  display: flex;
-  align-items: center;
-}
-.cart-icon-wrap:hover { color: #C9A84C; }
-.cart-badge {
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  background: #C9A84C;
-  color: #0A0A0A;
-  font-size: 9px;
-  font-weight: 700;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+          width: 100%;
+          height: 1px;
+          background: rgba(201,168,76,0.15);
+          margin: 4px 0;
+        }
+        .mobile-logout {
+          background: none;
+          border: none;
+          color: #ff6b6b;
+          font-size: 11px;
+          letter-spacing: 3px;
+          text-transform: uppercase;
+          cursor: pointer;
+          font-family: 'Jost', sans-serif;
+          text-align: left;
+          padding: 12px 24px;
+          width: 100%;
+          transition: all 0.2s;
+        }
+        .mobile-logout:hover {
+          background: rgba(255,107,107,0.08);
+          padding-left: 32px;
+        }
+        .cart-icon-wrap {
+          position: relative;
+          cursor: pointer;
+          color: #888;
+          transition: color 0.2s;
+          display: flex;
+          align-items: center;
+        }
+        .cart-icon-wrap:hover { color: #C9A84C; }
+        .cart-badge {
+          position: absolute;
+          top: -8px;
+          right: -8px;
+          background: #C9A84C;
+          color: #0A0A0A;
+          font-size: 9px;
+          font-weight: 700;
+          width: 18px;
+          height: 18px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
         @media (max-width: 768px) {
-          .navbar { padding: 0 24px; }
+          .navbar { padding: 0 24px; height: 80px; }
+          .nav-logo img { height: 56px; }
           .nav-links { display: none; }
           .nav-right { display: none; }
           .menu-icon { display: block; }
+          .mobile-menu { top: 80px; }
         }
       `}</style>
 
       <nav className="navbar">
         {/* LOGO */}
-        <Link to="/" className="nav-logo">YUGRANG</Link>
+        <Link to="/" className="nav-logo">
+          <img src={logo} alt="Yugrang Clothiers" />
+        </Link>
 
         {/* DESKTOP LINKS */}
         <ul className="nav-links">
@@ -193,7 +222,6 @@ export default function Navbar() {
 
         {/* DESKTOP RIGHT */}
         <div className="nav-right">
-
           {/* CART ICON */}
           <div className="cart-icon-wrap" onClick={() => navigate('/cart')}>
             <FiShoppingCart size={20} />
@@ -201,6 +229,7 @@ export default function Navbar() {
               <span className="cart-badge">{totalItems}</span>
             )}
           </div>
+
           {user ? (
             <>
               <span className="nav-username">
@@ -211,10 +240,10 @@ export default function Navbar() {
                 My Orders
               </Link>
               {user && user.email === 'yugrang2026@gmail.com' && (
-  <Link to="/admin" className="nav-link" style={{ color: '#C9A84C' }}>
-    Admin
-  </Link>
-)}
+                <Link to="/admin" className="nav-link" style={{ color: '#C9A84C' }}>
+                  Admin
+                </Link>
+              )}
               <button className="nav-logout-btn" onClick={handleLogout}>
                 <FiLogOut size={14} />
                 Logout
@@ -248,6 +277,14 @@ export default function Navbar() {
                 <span className="mobile-link" style={{ color: '#C9A84C' }}>
                   👤 {user.name}
                 </span>
+                <Link to="/my-orders" className="mobile-link" onClick={() => setMenuOpen(false)}>
+                  My Orders
+                </Link>
+                {user.email === 'yugrang2026@gmail.com' && (
+                  <Link to="/admin" className="mobile-link" style={{ color: '#C9A84C' }} onClick={() => setMenuOpen(false)}>
+                    Admin
+                  </Link>
+                )}
                 <button className="mobile-logout" onClick={handleLogout}>
                   Logout
                 </button>

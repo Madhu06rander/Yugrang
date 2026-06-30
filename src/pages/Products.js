@@ -1200,7 +1200,6 @@ export default function Products() {
             </div>
           </div>
 
-          {/* LEVEL 2 — Type Filter */}
           {activeMain !== 'All' && getCategoriesForMain(activeMain).length > 2 && (
             <div className="sub-filter-wrap">
               <p className="sub-filter-label">Filter by Type</p>
@@ -1228,7 +1227,6 @@ export default function Products() {
             </div>
           )}
 
-          {/* LEVEL 3 — Print Type Filter */}
           {activeCategory !== 'All' && subCategories.length > 2 && (
             <div className="sub-filter-wrap" style={{ marginTop: '12px' }}>
               <p className="sub-filter-label">Filter by Print Type</p>
@@ -1249,7 +1247,6 @@ export default function Products() {
           <p className="products-count">{filtered.length} Products Found</p>
         </div>
 
-        {/* GRID */}
         <div className="products-grid">
           {filtered.map(p => (
             <div className="product-card" key={p.id}>
@@ -1297,11 +1294,56 @@ export default function Products() {
               <button className="modal-close-btn" onClick={closeProduct}>
                 <FiX size={14} />
               </button>
-              <img
-                className="modal-main-img"
-                src={getImages(selectedProduct)[currentImg]}
-                alt={selectedProduct.name}
-              />
+              <div style={{ position: 'relative' }}>
+                <img
+                  className="modal-main-img"
+                  src={getImages(selectedProduct)[currentImg]}
+                  alt={selectedProduct.name}
+                />
+                {selectedColor && (
+                  <div
+                    style={{
+                      position: 'absolute',
+                      inset: 0,
+                      background: selectedColor,
+                      mixBlendMode: 'multiply',
+                      opacity: selectedColor === '#FFFFFF' ? 0 : 0.35,
+                      pointerEvents: 'none',
+                      transition: 'opacity 0.3s',
+                    }}
+                  />
+                )}
+                {selectedColor && (
+                  <div
+                    style={{
+                      position: 'absolute',
+                      bottom: '12px',
+                      left: '12px',
+                      background: 'rgba(0,0,0,0.7)',
+                      border: '1px solid rgba(201,168,76,0.4)',
+                      padding: '6px 12px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      fontSize: '10px',
+                      letterSpacing: '1px',
+                      color: '#F5F0E8',
+                      textTransform: 'uppercase',
+                    }}
+                  >
+                    <span
+                      style={{
+                        width: '12px',
+                        height: '12px',
+                        borderRadius: '50%',
+                        background: selectedColor,
+                        border: '1px solid rgba(255,255,255,0.3)',
+                      }}
+                    />
+                    Preview
+                  </div>
+                )}
+              </div>
               {getImages(selectedProduct).length > 1 && (
                 <div className="modal-thumbnails">
                   {getImages(selectedProduct).map((img, i) => (

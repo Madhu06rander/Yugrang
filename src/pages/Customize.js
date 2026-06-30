@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import {
   FiUpload, FiCheck, FiShoppingBag,
-  FiUser, FiPhone, FiMapPin
+  FiUser, FiPhone, FiMapPin, FiArrowLeft
 } from 'react-icons/fi';
 
 export default function Customize() {
@@ -78,6 +78,15 @@ export default function Customize() {
       return;
     }
     setStep(step + 1);
+  };
+
+  const prevStep = () => {
+    setError('');
+    if (step === 1) {
+      navigate(-1);
+      return;
+    }
+    setStep(step - 1);
   };
 
   const placeOrder = () => {
@@ -198,6 +207,23 @@ export default function Customize() {
           padding: 100px 60px 80px;
           background: #0A0A0A;
         }
+        .back-btn-customize {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          background: transparent;
+          border: none;
+          color: #888;
+          font-size: 11px;
+          letter-spacing: 2px;
+          text-transform: uppercase;
+          cursor: pointer;
+          font-family: 'Jost', sans-serif;
+          margin-bottom: 32px;
+          transition: color 0.2s;
+          padding: 0;
+        }
+        .back-btn-customize:hover { color: #C9A84C; }
         /* STEPPER */
         .stepper {
           display: flex;
@@ -467,6 +493,10 @@ export default function Customize() {
       `}</style>
 
       <div className="customize-page">
+        <button className="back-btn-customize" onClick={() => navigate(-1)}>
+          <FiArrowLeft size={14} /> Back
+        </button>
+
         <p className="section-eyebrow">Custom Order</p>
         <h1 className="section-title">Design Your<br /><em style={{ fontStyle: 'italic', color: '#C9A84C' }}>Perfect Piece</em></h1>
         <div className="section-line"></div>
@@ -770,11 +800,9 @@ export default function Customize() {
 
           {/* NAVIGATION BUTTONS */}
           <div className="step-actions">
-            {step > 1 && (
-              <button className="btn-back" onClick={() => { setError(''); setStep(step - 1); }}>
-                ← Back
-              </button>
-            )}
+            <button className="btn-back" onClick={prevStep}>
+              ← Back
+            </button>
             <button
               className="btn-primary"
               style={{ flex: 1, padding: '16px', fontSize: '11px', letterSpacing: '2px' }}

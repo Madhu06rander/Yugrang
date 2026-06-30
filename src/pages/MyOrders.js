@@ -329,16 +329,14 @@ export default function MyOrders() {
                       {statusSteps.map((step, i) => (
                         <React.Fragment key={step.key}>
                           <div className="tracking-step">
-                            <div className={`tracking-circle ${
-                              i < stepIndex ? 'completed' :
-                              i === stepIndex ? 'active' : ''
-                            }`}>
+                            <div className={`tracking-circle ${i < stepIndex ? 'completed' :
+                                i === stepIndex ? 'active' : ''
+                              }`}>
                               {i < stepIndex ? <FiCheck size={14} /> : step.icon}
                             </div>
-                            <div className={`tracking-label ${
-                              i < stepIndex ? 'completed' :
-                              i === stepIndex ? 'active' : ''
-                            }`}>
+                            <div className={`tracking-label ${i < stepIndex ? 'completed' :
+                                i === stepIndex ? 'active' : ''
+                              }`}>
                               {step.label}
                             </div>
                           </div>
@@ -372,75 +370,75 @@ export default function MyOrders() {
                   )}
 
                   {/* TRACKING ID + ADDRESS */}
-<div style={{
-  marginTop: '16px',
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '10px'
-}}>
-  {order.tracking_id && (
-    <div style={{
-      padding: '14px 16px',
-      background: 'rgba(201,168,76,0.06)',
-      border: '1px solid rgba(201,168,76,0.2)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      flexWrap: 'wrap',
-      gap: '8px'
-    }}>
-      <div>
-        <p style={{
-          fontSize: '9px',
-          letterSpacing: '3px',
-          textTransform: 'uppercase',
-          color: '#C9A84C',
-          margin: '0 0 4px 0'
-        }}>
-          🔍 Tracking ID
-        </p>
-        <p style={{
-          fontSize: '16px',
-          color: '#F5F0E8',
-          fontFamily: "'Cormorant Garamond', serif",
-          letterSpacing: '2px',
-          margin: 0
-        }}>
-          {order.tracking_id}
-        </p>
-      </div>
-      <button
-        onClick={() => {
-          navigator.clipboard.writeText(order.tracking_id);
-          alert('Tracking ID copied!');
-        }}
-        style={{
-          background: 'transparent',
-          border: '1px solid rgba(201,168,76,0.3)',
-          color: '#C9A84C',
-          padding: '6px 14px',
-          fontSize: '10px',
-          letterSpacing: '2px',
-          textTransform: 'uppercase',
-          cursor: 'pointer',
-          fontFamily: "'Jost', sans-serif",
-        }}
-      >
-        Copy
-      </button>
-    </div>
-  )}
-  <div style={{
-    padding: '12px 16px',
-    background: 'rgba(201,168,76,0.04)',
-    border: '1px solid rgba(201,168,76,0.08)',
-    fontSize: '12px',
-    color: '#666',
-    lineHeight: '1.8'
-  }}>
-    📍 {order.address}, {order.city} — {order.pincode}
-  </div>
-</div>
+                  <div style={{
+                    marginTop: '16px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '10px'
+                  }}>
+                    {order.tracking_id && (
+                      <div style={{
+                        padding: '14px 16px',
+                        background: 'rgba(201,168,76,0.06)',
+                        border: '1px solid rgba(201,168,76,0.2)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        flexWrap: 'wrap',
+                        gap: '8px'
+                      }}>
+                        <div>
+                          <p style={{
+                            fontSize: '9px',
+                            letterSpacing: '3px',
+                            textTransform: 'uppercase',
+                            color: '#C9A84C',
+                            margin: '0 0 4px 0'
+                          }}>
+                            🔍 Tracking ID
+                          </p>
+                          <p style={{
+                            fontSize: '16px',
+                            color: '#F5F0E8',
+                            fontFamily: "'Cormorant Garamond', serif",
+                            letterSpacing: '2px',
+                            margin: 0
+                          }}>
+                            {order.tracking_id}
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => {
+                            navigator.clipboard.writeText(order.tracking_id);
+                            alert('Tracking ID copied!');
+                          }}
+                          style={{
+                            background: 'transparent',
+                            border: '1px solid rgba(201,168,76,0.3)',
+                            color: '#C9A84C',
+                            padding: '6px 14px',
+                            fontSize: '10px',
+                            letterSpacing: '2px',
+                            textTransform: 'uppercase',
+                            cursor: 'pointer',
+                            fontFamily: "'Jost', sans-serif",
+                          }}
+                        >
+                          Copy
+                        </button>
+                      </div>
+                    )}
+                    <div style={{
+                      padding: '12px 16px',
+                      background: 'rgba(201,168,76,0.04)',
+                      border: '1px solid rgba(201,168,76,0.08)',
+                      fontSize: '12px',
+                      color: '#666',
+                      lineHeight: '1.8'
+                    }}>
+                      📍 {order.address}, {order.city} — {order.pincode}
+                    </div>
+                  </div>
                 </div>
               );
             })}

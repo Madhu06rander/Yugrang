@@ -110,7 +110,7 @@ export default function Footer() {
               Custom clothing crafted with care and passion.
             </p>
             <div className="social-row">
-              <a href="#" className="social-icon"><FiInstagram size={18} /></a>
+              <a href="https://www.instagram.com/yug_rang?igsh=ZTkzcjVzNXg2cGIw" className="social-icon"><FiInstagram size={18} /></a>
               <a href="#" className="social-icon"><FiFacebook size={18} /></a>
               <a href="#" className="social-icon"><FiTwitter size={18} /></a>
             </div>
@@ -146,7 +146,7 @@ export default function Footer() {
             <ul className="footer-col-list">
               <li><span className="footer-col-link">📍 Udaipur, Rajasthan</span></li>
               <li><span className="footer-col-link">📞 +91 XXXXXXXXXX</span></li>
-              <li><span className="footer-col-link">✉️ hello@Yugrang.in</span></li>
+              <li><span className="footer-col-link">✉️ yugrang2026@gmail.com</span></li>
               {/* <li><span className="footer-col-link">⏰ Mon–Sat, 10am–7pm</span></li> */}
             </ul>
           </div>
