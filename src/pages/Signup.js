@@ -2,70 +2,51 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { FiUser, FiMail, FiLock, FiEye, FiEyeOff, FiPhone } from 'react-icons/fi';
+import BrandEffect from '../components/BrandEffect';
 
 export default function Signup() {
   const { signup } = useAuth();
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    password: '',
-    confirmPassword: '',
+    name: '', email: '', phone: '', password: '', confirmPassword: '',
   });
   const [showPass, setShowPass] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showEffect, setShowEffect] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-const handleSignup = async () => {
-  setError('');
+  const handleSignup = async () => {
+    setError('');
+    if (!form.name || !form.email || !form.phone || !form.password || !form.confirmPassword) {
+      setError('Please fill in all fields.'); return;
+    }
+    if (form.name.length < 2) { setError('Please enter your full name.'); return; }
+    if (!form.email.includes('@')) { setError('Please enter a valid email address.'); return; }
+    if (form.phone.length < 10) { setError('Please enter a valid 10-digit phone number.'); return; }
+    if (form.password.length < 6) { setError('Password must be at least 6 characters.'); return; }
+    if (form.password !== form.confirmPassword) { setError('Passwords do not match.'); return; }
 
-  if (!form.name || !form.email || !form.phone || !form.password || !form.confirmPassword) {
-    setError('Please fill in all fields.');
-    return;
-  }
-  if (form.name.length < 2) {
-    setError('Please enter your full name.');
-    return;
-  }
-  if (!form.email.includes('@')) {
-    setError('Please enter a valid email address.');
-    return;
-  }
-  if (form.phone.length < 10) {
-    setError('Please enter a valid 10-digit phone number.');
-    return;
-  }
-  if (form.password.length < 6) {
-    setError('Password must be at least 6 characters.');
-    return;
-  }
-  if (form.password !== form.confirmPassword) {
-    setError('Passwords do not match.');
-    return;
-  }
-
-  setLoading(true);
-  const result = await signup(form.name, form.email, form.password, form.phone);
-  if (result.success) {
-    navigate('/');
-  } else {
-    setError(result.message);
-  }
-  setLoading(false);
-};
+    setLoading(true);
+    const result = await signup(form.name, form.email, form.password, form.phone);
+    if (result.success) {
+      navigate('/');
+      setTimeout(() => setShowEffect(true), 100);
+    } else {
+      setError(result.message);
+    }
+    setLoading(false);
+  };
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') handleSignup();
   };
 
-  // PASSWORD STRENGTH
   const getStrength = () => {
     const p = form.password;
     if (p.length === 0) return { label: '', color: 'transparent', width: '0%' };
@@ -78,15 +59,24 @@ const handleSignup = async () => {
 
   return (
     <>
+      <BrandEffect
+        show={showEffect}
+        message="signup"
+        subMessage="Clothiers · Est. 2026"
+        onComplete={() => setShowEffect(false)}
+      />
+
       <style>{`
         .auth-page {
           min-height: 100vh;
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: 100px 24px 60px;
+          padding: 100px 60px 60px;
           background: linear-gradient(160deg, #0A0A0A 0%, #111108 100%);
           position: relative;
+          width: 100%;
+          box-sizing: border-box;
         }
         .auth-page::before {
           content: '';
@@ -119,10 +109,7 @@ const handleSignup = async () => {
           margin-bottom: 8px;
           line-height: 1.1;
         }
-        .auth-title em {
-          font-style: italic;
-          color: #C9A84C;
-        }
+        .auth-title em { font-style: italic; color: #C9A84C; }
         .auth-sub {
           font-size: 12px;
           color: #888;
@@ -130,10 +117,7 @@ const handleSignup = async () => {
           margin-bottom: 40px;
           line-height: 1.7;
         }
-        .input-wrapper {
-          position: relative;
-          width: 100%;
-        }
+        .input-wrapper { position: relative; width: 100%; }
         .input-icon {
           position: absolute;
           left: 16px;
@@ -142,9 +126,7 @@ const handleSignup = async () => {
           color: #888;
           pointer-events: none;
         }
-        .input-with-icon {
-          padding-left: 44px !important;
-        }
+        .input-with-icon { padding-left: 44px !important; }
         .pass-toggle {
           position: absolute;
           right: 16px;
@@ -168,9 +150,7 @@ const handleSignup = async () => {
           margin-bottom: 20px;
           line-height: 1.5;
         }
-        .strength-bar-wrap {
-          margin-top: 8px;
-        }
+        .strength-bar-wrap { margin-top: 8px; }
         .strength-bar-bg {
           width: 100%;
           height: 3px;
@@ -178,11 +158,7 @@ const handleSignup = async () => {
           border-radius: 2px;
           overflow: hidden;
         }
-        .strength-bar-fill {
-          height: 100%;
-          border-radius: 2px;
-          transition: all 0.4s;
-        }
+        .strength-bar-fill { height: 100%; border-radius: 2px; transition: all 0.4s; }
         .strength-label {
           font-size: 10px;
           letter-spacing: 2px;
@@ -200,26 +176,15 @@ const handleSignup = async () => {
           gap: 16px;
           margin: 28px 0;
         }
-        .auth-divider-line {
-          flex: 1;
-          height: 1px;
-          background: rgba(201,168,76,0.15);
-        }
+        .auth-divider-line { flex: 1; height: 1px; background: rgba(201,168,76,0.15); }
         .auth-divider-text {
           font-size: 10px;
           letter-spacing: 2px;
           color: #888;
           text-transform: uppercase;
         }
-        .auth-bottom {
-          text-align: center;
-          margin-top: 28px;
-        }
-        .auth-bottom-text {
-          font-size: 12px;
-          color: #888;
-          letter-spacing: 0.5px;
-        }
+        .auth-bottom { text-align: center; margin-top: 28px; }
+        .auth-bottom-text { font-size: 12px; color: #888; letter-spacing: 0.5px; }
         .auth-bottom-link {
           color: #C9A84C;
           text-decoration: none;
@@ -240,18 +205,12 @@ const handleSignup = async () => {
           border: none;
           transition: all 0.3s;
         }
-        .btn-gold {
-          background: #C9A84C;
-          color: #0A0A0A;
-        }
+        .btn-gold { background: #C9A84C; color: #0A0A0A; }
         .btn-gold:hover:not(:disabled) {
           background: #E8D5A3;
           transform: translateY(-2px);
         }
-        .btn-gold:disabled {
-          opacity: 0.6;
-          cursor: not-allowed;
-        }
+        .btn-gold:disabled { opacity: 0.6; cursor: not-allowed; }
         .corner-tl {
           position: absolute;
           top: -1px; left: -1px;
@@ -274,6 +233,29 @@ const handleSignup = async () => {
           line-height: 1.6;
           letter-spacing: 0.3px;
         }
+        .form-input {
+          width: 100%;
+          background: #1A1A1A !important;
+          border: 1px solid rgba(201,168,76,0.2);
+          color: #F5F0E8 !important;
+          padding: 14px 16px;
+          font-family: 'Jost', sans-serif;
+          font-size: 13px;
+          outline: none;
+          transition: border-color 0.2s;
+          box-sizing: border-box;
+        }
+        .form-input:focus { border-color: #C9A84C; }
+        .form-input::placeholder { color: #555 !important; }
+        .form-label {
+          display: block;
+          font-size: 9px;
+          letter-spacing: 3px;
+          text-transform: uppercase;
+          color: #C9A84C;
+          margin-bottom: 10px;
+        }
+        .form-group { margin-bottom: 24px; }
 
         @media (max-width: 520px) {
           .auth-card { padding: 40px 24px; }
@@ -284,22 +266,17 @@ const handleSignup = async () => {
 
       <div className="auth-page">
         <div className="auth-card">
-
-          {/* CORNER DECORATIONS */}
           <div className="corner-tl"></div>
           <div className="corner-br"></div>
 
           <p className="auth-eyebrow">Join Us Today</p>
           <h1 className="auth-title">Create Your<br /><em>Account</em></h1>
           <p className="auth-sub">
-            Sign up to place custom orders, track deliveries,
-            and save your favourite designs.
+            Sign up to place custom orders, track deliveries, and save your favourite designs.
           </p>
 
-          {/* ERROR */}
           {error && <div className="error-box">⚠ {error}</div>}
 
-          {/* NAME & PHONE ROW */}
           <div className="form-row">
             <div className="form-group">
               <label className="form-label">Full Name</label>
@@ -307,8 +284,7 @@ const handleSignup = async () => {
                 <FiUser size={15} className="input-icon" />
                 <input
                   className="form-input input-with-icon"
-                  type="text"
-                  name="name"
+                  type="text" name="name"
                   placeholder="Your Name"
                   value={form.name}
                   onChange={handleChange}
@@ -322,8 +298,7 @@ const handleSignup = async () => {
                 <FiPhone size={15} className="input-icon" />
                 <input
                   className="form-input input-with-icon"
-                  type="tel"
-                  name="phone"
+                  type="tel" name="phone"
                   placeholder="10-digit number"
                   value={form.phone}
                   onChange={handleChange}
@@ -334,15 +309,13 @@ const handleSignup = async () => {
             </div>
           </div>
 
-          {/* EMAIL */}
           <div className="form-group">
             <label className="form-label">Email Address</label>
             <div className="input-wrapper">
               <FiMail size={15} className="input-icon" />
               <input
                 className="form-input input-with-icon"
-                type="email"
-                name="email"
+                type="email" name="email"
                 placeholder="you@example.com"
                 value={form.email}
                 onChange={handleChange}
@@ -351,7 +324,6 @@ const handleSignup = async () => {
             </div>
           </div>
 
-          {/* PASSWORD */}
           <div className="form-group">
             <label className="form-label">Password</label>
             <div className="input-wrapper">
@@ -366,23 +338,15 @@ const handleSignup = async () => {
                 onKeyPress={handleKeyPress}
                 style={{ paddingRight: '44px' }}
               />
-              <button
-                className="pass-toggle"
-                onClick={() => setShowPass(!showPass)}
-              >
+              <button className="pass-toggle" onClick={() => setShowPass(!showPass)}>
                 {showPass ? <FiEyeOff size={15} /> : <FiEye size={15} />}
               </button>
             </div>
-            {/* PASSWORD STRENGTH */}
             {form.password.length > 0 && (
               <div className="strength-bar-wrap">
                 <div className="strength-bar-bg">
-                  <div
-                    className="strength-bar-fill"
-                    style={{
-                      width: strength.width,
-                      background: strength.color,
-                    }}
+                  <div className="strength-bar-fill"
+                    style={{ width: strength.width, background: strength.color }}
                   />
                 </div>
                 <p className="strength-label" style={{ color: strength.color }}>
@@ -392,7 +356,6 @@ const handleSignup = async () => {
             )}
           </div>
 
-          {/* CONFIRM PASSWORD */}
           <div className="form-group">
             <label className="form-label">Confirm Password</label>
             <div className="input-wrapper">
@@ -407,27 +370,22 @@ const handleSignup = async () => {
                 onKeyPress={handleKeyPress}
                 style={{ paddingRight: '44px' }}
               />
-              <button
-                className="pass-toggle"
-                onClick={() => setShowConfirm(!showConfirm)}
-              >
+              <button className="pass-toggle" onClick={() => setShowConfirm(!showConfirm)}>
                 {showConfirm ? <FiEyeOff size={15} /> : <FiEye size={15} />}
               </button>
             </div>
-            {/* MATCH INDICATOR */}
             {form.confirmPassword.length > 0 && (
               <p style={{
-                fontSize: '10px',
-                letterSpacing: '1px',
-                marginTop: '5px',
+                fontSize: '10px', letterSpacing: '1px', marginTop: '5px',
                 color: form.password === form.confirmPassword ? '#4CAF50' : '#ff6b6b'
               }}>
-                {form.password === form.confirmPassword ? '✓ Passwords match' : '✗ Passwords do not match'}
+                {form.password === form.confirmPassword
+                  ? '✓ Passwords match'
+                  : '✗ Passwords do not match'}
               </p>
             )}
           </div>
 
-          {/* SIGNUP BUTTON */}
           <button
             className="btn-full btn-gold"
             onClick={handleSignup}
@@ -437,8 +395,7 @@ const handleSignup = async () => {
           </button>
 
           <p className="terms-text">
-            By signing up you agree to our Terms of Service<br />
-            and Privacy Policy.
+            By signing up you agree to our Terms of Service<br />and Privacy Policy.
           </p>
 
           <div className="auth-divider">
@@ -447,16 +404,12 @@ const handleSignup = async () => {
             <div className="auth-divider-line"></div>
           </div>
 
-          {/* LOGIN LINK */}
           <div className="auth-bottom">
             <p className="auth-bottom-text">
               Already have an account?{' '}
-              <Link to="/login" className="auth-bottom-link">
-                Login here
-              </Link>
+              <Link to="/login" className="auth-bottom-link">Login here</Link>
             </p>
           </div>
-
         </div>
       </div>
     </>

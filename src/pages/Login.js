@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { FiMail, FiLock, FiEye, FiEyeOff } from 'react-icons/fi';
+import BrandEffect from '../components/BrandEffect';
 
 export default function Login() {
   const { login } = useAuth();
@@ -12,28 +13,28 @@ export default function Login() {
   const [showPass, setShowPass] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showEffect, setShowEffect] = useState(false);
 
   const handleLogin = async () => {
-  setError('');
-
-  if (!email || !password) {
-    setError('Please fill in all fields.');
-    return;
-  }
-  if (!email.includes('@')) {
-    setError('Please enter a valid email address.');
-    return;
-  }
-
-  setLoading(true);
-  const result = await login(email, password);
-  if (result.success) {
-    navigate('/');
-  } else {
-    setError(result.message);
-  }
-  setLoading(false);
-};
+    setError('');
+    if (!email || !password) {
+      setError('Please fill in all fields.');
+      return;
+    }
+    if (!email.includes('@')) {
+      setError('Please enter a valid email address.');
+      return;
+    }
+    setLoading(true);
+    const result = await login(email, password);
+    if (result.success) {
+      navigate('/');
+      setTimeout(() => setShowEffect(true), 100);
+    } else {
+      setError(result.message);
+    }
+    setLoading(false);
+  };
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') handleLogin();
@@ -41,15 +42,24 @@ export default function Login() {
 
   return (
     <>
+      <BrandEffect
+        show={showEffect}
+        message="login"
+        subMessage="Clothiers · Est. 2026"
+        onComplete={() => setShowEffect(false)}
+      />
+
       <style>{`
         .auth-page {
           min-height: 100vh;
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: 100px 24px 60px;
+          padding: 100px 60px 60px;
           background: linear-gradient(160deg, #0A0A0A 0%, #111108 100%);
           position: relative;
+          width: 100%;
+          box-sizing: border-box;
         }
         .auth-page::before {
           content: '';
@@ -82,10 +92,7 @@ export default function Login() {
           margin-bottom: 8px;
           line-height: 1.1;
         }
-        .auth-title em {
-          font-style: italic;
-          color: #C9A84C;
-        }
+        .auth-title em { font-style: italic; color: #C9A84C; }
         .auth-sub {
           font-size: 12px;
           color: #888;
@@ -93,10 +100,7 @@ export default function Login() {
           margin-bottom: 40px;
           line-height: 1.7;
         }
-        .input-wrapper {
-          position: relative;
-          width: 100%;
-        }
+        .input-wrapper { position: relative; width: 100%; }
         .input-icon {
           position: absolute;
           left: 16px;
@@ -105,9 +109,7 @@ export default function Login() {
           color: #888;
           pointer-events: none;
         }
-        .input-with-icon {
-          padding-left: 44px !important;
-        }
+        .input-with-icon { padding-left: 44px !important; }
         .pass-toggle {
           position: absolute;
           right: 16px;
@@ -122,8 +124,8 @@ export default function Login() {
         }
         .pass-toggle:hover { color: #C9A84C; }
         .error-box {
-          background: rgba(255, 107, 107, 0.08);
-          border: 1px solid rgba(255, 107, 107, 0.3);
+          background: rgba(255,107,107,0.08);
+          border: 1px solid rgba(255,107,107,0.3);
           padding: 12px 16px;
           font-size: 12px;
           color: #ff6b6b;
@@ -148,15 +150,8 @@ export default function Login() {
           color: #888;
           text-transform: uppercase;
         }
-        .auth-bottom {
-          text-align: center;
-          margin-top: 28px;
-        }
-        .auth-bottom-text {
-          font-size: 12px;
-          color: #888;
-          letter-spacing: 0.5px;
-        }
+        .auth-bottom { text-align: center; margin-top: 28px; }
+        .auth-bottom-text { font-size: 12px; color: #888; letter-spacing: 0.5px; }
         .auth-bottom-link {
           color: #C9A84C;
           text-decoration: none;
@@ -177,36 +172,49 @@ export default function Login() {
           border: none;
           transition: all 0.3s;
         }
-        .btn-gold {
-          background: #C9A84C;
-          color: #0A0A0A;
-        }
+        .btn-gold { background: #C9A84C; color: #0A0A0A; }
         .btn-gold:hover:not(:disabled) {
           background: #E8D5A3;
           transform: translateY(-2px);
         }
-        .btn-gold:disabled {
-          opacity: 0.6;
-          cursor: not-allowed;
-        }
+        .btn-gold:disabled { opacity: 0.6; cursor: not-allowed; }
         .corner-tl {
           position: absolute;
-          top: -1px;
-          left: -1px;
-          width: 20px;
-          height: 20px;
+          top: -1px; left: -1px;
+          width: 20px; height: 20px;
           border-top: 2px solid #C9A84C;
           border-left: 2px solid #C9A84C;
         }
         .corner-br {
           position: absolute;
-          bottom: -1px;
-          right: -1px;
-          width: 20px;
-          height: 20px;
+          bottom: -1px; right: -1px;
+          width: 20px; height: 20px;
           border-bottom: 2px solid #C9A84C;
           border-right: 2px solid #C9A84C;
         }
+        .form-input {
+          width: 100%;
+          background: #1A1A1A !important;
+          border: 1px solid rgba(201,168,76,0.2);
+          color: #F5F0E8 !important;
+          padding: 14px 16px;
+          font-family: 'Jost', sans-serif;
+          font-size: 13px;
+          outline: none;
+          transition: border-color 0.2s;
+          box-sizing: border-box;
+        }
+        .form-input:focus { border-color: #C9A84C; }
+        .form-input::placeholder { color: #555 !important; }
+        .form-label {
+          display: block;
+          font-size: 9px;
+          letter-spacing: 3px;
+          text-transform: uppercase;
+          color: #C9A84C;
+          margin-bottom: 10px;
+        }
+        .form-group { margin-bottom: 24px; }
 
         @media (max-width: 520px) {
           .auth-card { padding: 40px 24px; }
@@ -216,8 +224,6 @@ export default function Login() {
 
       <div className="auth-page">
         <div className="auth-card">
-
-          {/* CORNER DECORATIONS */}
           <div className="corner-tl"></div>
           <div className="corner-br"></div>
 
@@ -227,10 +233,8 @@ export default function Login() {
             Enter your credentials to access your account and manage your orders.
           </p>
 
-          {/* ERROR */}
           {error && <div className="error-box">⚠ {error}</div>}
 
-          {/* EMAIL */}
           <div className="form-group">
             <label className="form-label">Email Address</label>
             <div className="input-wrapper">
@@ -246,7 +250,6 @@ export default function Login() {
             </div>
           </div>
 
-          {/* PASSWORD */}
           <div className="form-group">
             <label className="form-label">Password</label>
             <div className="input-wrapper">
@@ -260,16 +263,12 @@ export default function Login() {
                 onKeyPress={handleKeyPress}
                 style={{ paddingRight: '44px' }}
               />
-              <button
-                className="pass-toggle"
-                onClick={() => setShowPass(!showPass)}
-              >
+              <button className="pass-toggle" onClick={() => setShowPass(!showPass)}>
                 {showPass ? <FiEyeOff size={15} /> : <FiEye size={15} />}
               </button>
             </div>
           </div>
 
-          {/* LOGIN BUTTON */}
           <button
             className="btn-full btn-gold"
             onClick={handleLogin}
@@ -284,7 +283,6 @@ export default function Login() {
             <div className="auth-divider-line"></div>
           </div>
 
-          {/* SIGNUP LINK */}
           <div className="auth-bottom">
             <p className="auth-bottom-text">
               Don't have an account?{' '}
@@ -293,7 +291,6 @@ export default function Login() {
               </Link>
             </p>
           </div>
-
         </div>
       </div>
     </>

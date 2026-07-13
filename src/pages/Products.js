@@ -4,6 +4,9 @@ import { useAuth } from '../context/AuthContext';
 import { FiShoppingBag, FiSliders, FiX, FiArrowLeft } from 'react-icons/fi';
 import { useLocation } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import SizeGuide from '../components/SizeGuide';
+import { useWishlist } from '../context/WishlistContext';
+import { FiHeart } from 'react-icons/fi';
 
 // MEN KURTA IMAGES
 import menKurta1 from '../assets/images/MEN KURTA/floral.jpg';
@@ -97,6 +100,7 @@ import womenTshirt6 from '../assets/images/WOMEN TISHIRT/Sun and Moon.jpg';
 import womenTshirt7 from '../assets/images/WOMEN TISHIRT/Sunflower Theory.jpg';
 
 const mainCategories = ['All', 'Men', 'Women', 'Couple', 'Winter', 'Handkerchief'];
+
 
 const subCategoryMap = {
   'Men': ['All', 'Men Shirts', 'Mens T-Shirt', 'Men Kurta'],
@@ -707,6 +711,8 @@ export default function Products() {
   const navigate = useNavigate();
   const location = useLocation();
   const { addToCart } = useCart();
+  const { addToWishlist, removeFromWishlist, isWishlisted } = useWishlist();
+  const [zoomStyle, setZoomStyle] = useState({});
 
   const getInitialCategory = () => {
     const params = new URLSearchParams(location.search);
@@ -732,6 +738,7 @@ export default function Products() {
   const [sortBy, setSortBy] = useState('default');
   const [currentImg, setCurrentImg] = useState(0);
   const [cartMsg, setCartMsg] = useState('');
+  const [showSizeGuide, setShowSizeGuide] = useState(false);
 
   const getCategoriesForMain = (main) => {
     if (main === 'All') return [];
@@ -798,14 +805,57 @@ export default function Products() {
     setCartMsg(`✅ "${selectedProduct.name}" added to cart!`);
   };
 
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    setZoomStyle({
+      transformOrigin: `${x}% ${y}%`,
+      transform: 'scale(2)',
+      transition: 'transform 0.1s ease',
+    });
+  };
+
+  const handleMouseLeave = () => {
+    setZoomStyle({
+      transform: 'scale(1)',
+      transition: 'transform 0.3s ease',
+    });
+  };
+
   return (
     <>
       <style>{`
-        .products-page {
-          min-height: 100vh;
-          padding: 100px 60px 80px;
-          background: #0A0A0A;
-        }
+
+      .products-header .section-eyebrow {
+  color: #C9A84C !important;
+  opacity: 1 !important;
+  display: block !important;
+}
+.products-header .section-title {
+  color: #F5F0E8 !important;
+  opacity: 1 !important;
+  display: block !important;
+  font-family: 'Cormorant Garamond', serif !important;
+  font-size: clamp(36px, 5vw, 56px) !important;
+  font-weight: 300 !important;
+}
+.products-header .section-line {
+  width: 48px !important;
+  height: 1px !important;
+  background: #C9A84C !important;
+  display: block !important;
+  opacity: 1 !important;
+  margin-bottom: 16px !important;
+}
+     .products-page {
+  min-height: 100vh;
+  padding: 100px 40px 80px;
+  background: #0A0A0A;
+  width: 100vw;
+  margin: 0;
+  box-sizing: border-box;
+}
         .back-btn-prod {
           display: flex;
           align-items: center;
@@ -1017,11 +1067,27 @@ export default function Products() {
         }
         .modal-left { position: relative; }
         .modal-main-img {
-          width: 100%;
-          height: 400px;
-          object-fit: cover;
-          display: block;
-        }
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
+  cursor: zoom-in;
+}
+.modal-img-wrap {
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+  cursor: crosshair;
+}
+.modal-main-img {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.1s ease;
+  transform-origin: 0 0;
+}
         .modal-thumbnails {
           display: flex;
           gap: 6px;
@@ -1214,13 +1280,13 @@ export default function Products() {
                     }}
                   >
                     {cat === 'All' ? 'All' :
-                     cat === 'Men Shirts' ? 'Shirts' :
-                     cat === 'Mens T-Shirt' ? 'T-Shirt' :
-                     cat === 'Men Kurta' ? 'Kurta' :
-                     cat === 'Women Kurti' ? 'Kurti' :
-                     cat === 'Women Shirt' ? 'Shirt' :
-                     cat === 'Women T-Shirt' ? 'T-Shirt' :
-                     cat}
+                      cat === 'Men Shirts' ? 'Shirts' :
+                        cat === 'Mens T-Shirt' ? 'T-Shirt' :
+                          cat === 'Men Kurta' ? 'Kurta' :
+                            cat === 'Women Kurti' ? 'Kurti' :
+                              cat === 'Women Shirt' ? 'Shirt' :
+                                cat === 'Women T-Shirt' ? 'T-Shirt' :
+                                  cat}
                   </button>
                 ))}
               </div>
@@ -1267,6 +1333,36 @@ export default function Products() {
                   </div>
                 )}
                 {p.badge && <span className="product-badge">{p.badge}</span>}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    isWishlisted(p.id)
+                      ? removeFromWishlist(p.id)
+                      : addToWishlist(p);
+                  }}
+                  style={{
+                    position: 'absolute',
+                    top: '16px',
+                    left: '16px',
+                    background: 'rgba(0,0,0,0.6)',
+                    border: '1px solid rgba(201,168,76,0.3)',
+                    color: isWishlisted(p.id) ? '#C9A84C' : '#888',
+                    width: '36px',
+                    height: '36px',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s',
+                    zIndex: 2,
+                  }}
+                >
+                  <FiHeart
+                    size={16}
+                    fill={isWishlisted(p.id) ? '#C9A84C' : 'none'}
+                  />
+                </button>
               </div>
               <div className="product-info">
                 <p className="product-category">{p.category}</p>
@@ -1295,11 +1391,18 @@ export default function Products() {
                 <FiX size={14} />
               </button>
               <div style={{ position: 'relative' }}>
-                <img
-                  className="modal-main-img"
-                  src={getImages(selectedProduct)[currentImg]}
-                  alt={selectedProduct.name}
-                />
+                <div
+                  className="modal-img-wrap"
+                  onMouseMove={handleMouseMove}
+                  onMouseLeave={handleMouseLeave}
+                >
+                  <img
+                    className="modal-main-img"
+                    src={getImages(selectedProduct)[currentImg]}
+                    alt={selectedProduct.name}
+                    style={zoomStyle}
+                  />
+                </div>
                 {selectedColor && (
                   <div
                     style={{
@@ -1368,7 +1471,30 @@ export default function Products() {
               <p className="modal-desc">{selectedProduct.desc}</p>
               <div className="modal-price">₹{selectedProduct.price}</div>
 
-              <p className="modal-label">Select Size</p>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: '10px'
+              }}>
+                <p className="modal-label" style={{ margin: 0 }}>Select Size</p>
+                <button
+                  onClick={() => setShowSizeGuide(true)}
+                  style={{
+                    background: 'transparent',
+                    border: 'none',
+                    color: '#C9A84C',
+                    fontSize: '10px',
+                    letterSpacing: '1px',
+                    cursor: 'pointer',
+                    fontFamily: "'Jost', sans-serif",
+                    textDecoration: 'underline',
+                    textUnderlineOffset: '3px',
+                  }}
+                >
+                  📏 Size Guide
+                </button>
+              </div>
               <div className="sizes-row">
                 {selectedProduct.sizes.map(s => (
                   <button
@@ -1451,6 +1577,11 @@ export default function Products() {
           </div>
         </div>
       )}
+      <SizeGuide
+        isOpen={showSizeGuide}
+        onClose={() => setShowSizeGuide(false)}
+        category={selectedProduct?.category}
+      />
     </>
   );
 }

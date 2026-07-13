@@ -125,6 +125,9 @@ export default function Footer() {
               <li><Link to="/customize" className="footer-col-link">Customise</Link></li>
               <li><Link to="/login" className="footer-col-link">Login</Link></li>
               <li><Link to="/signup" className="footer-col-link">Sign Up</Link></li>
+              <Link to="/reviews" className="footer-link">Reviews</Link>
+              <Link to="/about" className="footer-link">About Us</Link>
+              <Link to="/privacy" className="footer-link">Privacy Policy</Link>
             </ul>
           </div>
 
