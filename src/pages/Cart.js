@@ -10,13 +10,13 @@ export default function Cart() {
   const navigate = useNavigate();
 
   const handleCheckout = () => {
-  if (!user) { navigate('/login'); return; }
-  navigate('/checkout', {
-    state: {
-      cartItems: cartItems,
-    }
-  });
-};
+    if (!user) { navigate('/login'); return; }
+    navigate('/checkout', {
+      state: {
+        cartItems: cartItems,
+      }
+    });
+  };
 
   if (cartItems.length === 0) {
     return (
@@ -51,7 +51,21 @@ export default function Cart() {
           <div className="empty-icon">🛒</div>
           <h2 className="empty-title">Cart is <em>Empty</em></h2>
           <p className="empty-sub">Add some products to your cart first!</p>
-          <button className="btn-primary" onClick={() => navigate('/products')}>
+          <button
+            onClick={() => navigate('/products')}
+            style={{
+              background: '#C9A84C',
+              color: '#0A0A0A',
+              border: 'none',
+              padding: '14px 40px',
+              fontSize: '11px',
+              letterSpacing: '3px',
+              textTransform: 'uppercase',
+              cursor: 'pointer',
+              fontFamily: "'Jost', sans-serif",
+              fontWeight: '600',
+            }}
+          >
             Browse Collection
           </button>
         </div>
@@ -62,11 +76,15 @@ export default function Cart() {
   return (
     <>
       <style>{`
-        .cart-page {
-          min-height: 100vh;
-          padding: 100px 60px 80px;
-          background: #0A0A0A;
-        }
+       .cart-page {
+  min-height: 100vh;
+  padding: 100px 60px 80px;
+  background: #0A0A0A;
+  width: 100vw;
+  margin: 0;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
         .cart-grid {
           display: grid;
           grid-template-columns: 1fr 360px;

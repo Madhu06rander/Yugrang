@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import { orderAPI } from '../api';
 import { FiUser, FiPhone, FiMapPin, FiCheck, FiArrowLeft } from 'react-icons/fi';
+import BrandEffect from '../components/BrandEffect';
 
 export default function Checkout() {
   const { user } = useAuth();
@@ -30,6 +31,7 @@ export default function Checkout() {
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [orderId, setOrderId] = useState('');
   const [trackingId, setTrackingId] = useState('');
+  const [showEffect, setShowEffect] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -84,7 +86,7 @@ export default function Checkout() {
         setOrderId(result.order_id);
         setTrackingId(result.tracking_id);
         if (!buyNowItem) clearCart();
-        setOrderPlaced(true);
+        setShowEffect(true);
       } else {
         setError(result.detail || 'Order failed! Please try again.');
       }
@@ -116,14 +118,16 @@ export default function Checkout() {
             background: #1A1A1A;
             position: relative;
           }
-          .success-corner-tl {
+          .success-card::before {
+            content: '';
             position: absolute;
             top: -1px; left: -1px;
             width: 20px; height: 20px;
             border-top: 2px solid #C9A84C;
             border-left: 2px solid #C9A84C;
           }
-          .success-corner-br {
+          .success-card::after {
+            content: '';
             position: absolute;
             bottom: -1px; right: -1px;
             width: 20px; height: 20px;
@@ -197,15 +201,9 @@ export default function Checkout() {
             justify-content: center;
             flex-wrap: wrap;
           }
-          @media (max-width: 520px) {
-            .success-card { padding: 40px 24px; }
-            .success-title { font-size: 32px; }
-          }
         `}</style>
         <div className="success-page">
           <div className="success-card">
-            <div className="success-corner-tl"></div>
-            <div className="success-corner-br"></div>
             <div className="success-icon">
               <FiCheck size={32} />
             </div>
@@ -251,10 +249,16 @@ export default function Checkout() {
             )}
 
             <div className="success-actions">
-              <button className="btn-primary" onClick={() => navigate('/my-orders')}>
+              <button
+                className="btn-primary"
+                onClick={() => navigate('/my-orders')}
+              >
                 Track My Order
               </button>
-              <button className="btn-outline" onClick={() => navigate('/products')}>
+              <button
+                className="btn-outline"
+                onClick={() => navigate('/products')}
+              >
                 Shop More
               </button>
             </div>
@@ -266,6 +270,13 @@ export default function Checkout() {
 
   return (
     <>
+      <BrandEffect
+        show={showEffect}
+        message="order"
+        subMessage={`Order ID: ${orderId}`}
+        onComplete={() => setOrderPlaced(true)}
+      />
+
       <style>{`
         .checkout-page {
           min-height: 100vh;
@@ -275,6 +286,8 @@ export default function Checkout() {
           grid-template-columns: 1fr 380px;
           gap: 40px;
           align-items: start;
+          width: 100%;
+          box-sizing: border-box;
         }
         .back-btn {
           display: flex;
@@ -484,6 +497,29 @@ export default function Checkout() {
           font-family: 'Cormorant Garamond', serif;
           font-size: 30px; color: #C9A84C;
         }
+        .form-input {
+          width: 100%;
+          background: #1A1A1A !important;
+          border: 1px solid rgba(201,168,76,0.2);
+          color: #F5F0E8 !important;
+          padding: 14px 16px;
+          font-family: 'Jost', sans-serif;
+          font-size: 13px;
+          outline: none;
+          transition: border-color 0.2s;
+          box-sizing: border-box;
+        }
+        .form-input:focus { border-color: #C9A84C; }
+        .form-input::placeholder { color: #555 !important; }
+        .form-label {
+          display: block;
+          font-size: 9px;
+          letter-spacing: 3px;
+          text-transform: uppercase;
+          color: #C9A84C;
+          margin-bottom: 10px;
+        }
+        .form-group { margin-bottom: 20px; }
         @media (max-width: 900px) {
           .checkout-page {
             grid-template-columns: 1fr;

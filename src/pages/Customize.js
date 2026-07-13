@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import {
-  FiUpload, FiCheck, FiShoppingBag,
-  FiUser, FiPhone, FiMapPin, FiArrowLeft
-} from 'react-icons/fi';
+import { FiUpload, FiCheck, FiArrowLeft } from 'react-icons/fi';
 
 export default function Customize() {
   const { user } = useAuth();
@@ -33,9 +30,16 @@ export default function Customize() {
   const [orderPlaced, setOrderPlaced] = useState(false);
 
   const colors = [
-    '#1a1a1a', '#FFFFFF', '#C9A84C', '#8B0000',
-    '#1B3A6B', '#2D5A27', '#F4C2C2', '#FFA500',
-    '#800080', '#40E0D0',
+    { hex: '#1a1a1a', name: 'Black' },
+    { hex: '#FFFFFF', name: 'White' },
+    { hex: '#C9A84C', name: 'Gold' },
+    { hex: '#8B0000', name: 'Maroon' },
+    { hex: '#1B3A6B', name: 'Navy' },
+    { hex: '#2D5A27', name: 'Forest Green' },
+    { hex: '#F4C2C2', name: 'Baby Pink' },
+    { hex: '#FFA500', name: 'Orange' },
+    { hex: '#800080', name: 'Purple' },
+    { hex: '#40E0D0', name: 'Turquoise' },
   ];
 
   const handleChange = (e) => {
@@ -61,10 +65,10 @@ export default function Customize() {
 
   const validateStep3 = () => {
     if (!form.name) { setError('Please enter your name.'); return false; }
-    if (!form.phone || form.phone.length < 10) { setError('Please enter a valid phone number.'); return false; }
+    if (!form.phone || form.phone.length < 10) { setError('Please enter valid phone number.'); return false; }
     if (!form.address) { setError('Please enter your address.'); return false; }
     if (!form.city) { setError('Please enter your city.'); return false; }
-    if (!form.pincode || form.pincode.length < 6) { setError('Please enter a valid pincode.'); return false; }
+    if (!form.pincode || form.pincode.length < 6) { setError('Please enter valid pincode.'); return false; }
     return true;
   };
 
@@ -72,8 +76,8 @@ export default function Customize() {
     setError('');
     if (step === 1 && !validateStep1()) return;
     if (step === 2 && !validateStep2()) return;
-    if (step === 3 && !validateStep3()) return;
     if (step === 3) {
+      if (!validateStep3()) return;
       placeOrder();
       return;
     }
@@ -82,27 +86,14 @@ export default function Customize() {
 
   const prevStep = () => {
     setError('');
-    if (step === 1) {
-      navigate(-1);
-      return;
-    }
+    if (step === 1) { navigate(-1); return; }
     setStep(step - 1);
   };
 
   const placeOrder = () => {
-    const order = {
-      ...form,
-      user: user.email,
-      orderId: 'LT' + Date.now(),
-      date: new Date().toLocaleDateString('en-IN'),
-    };
-    const orders = JSON.parse(localStorage.getItem('yugrang_orders')) || [];
-    orders.push(order);
-    localStorage.setItem('yugrang_orders', JSON.stringify(orders));
     setOrderPlaced(true);
   };
 
-  // ORDER SUCCESS SCREEN
   if (orderPlaced) {
     return (
       <>
@@ -122,72 +113,80 @@ export default function Customize() {
             border: 1px solid rgba(201,168,76,0.25);
             padding: 60px 48px;
             background: #1A1A1A;
+            position: relative;
           }
-          .success-icon {
-            width: 72px;
-            height: 72px;
-            border-radius: 50%;
-            background: rgba(201,168,76,0.1);
-            border: 1px solid rgba(201,168,76,0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 28px;
-            color: #C9A84C;
+          .success-card::before {
+            content: '';
+            position: absolute;
+            top: -1px; left: -1px;
+            width: 24px; height: 24px;
+            border-top: 2px solid #C9A84C;
+            border-left: 2px solid #C9A84C;
           }
-          .success-title {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 42px;
-            font-weight: 300;
-            color: #F5F0E8;
-            margin-bottom: 12px;
-          }
-          .success-title em { font-style: italic; color: #C9A84C; }
-          .success-sub {
-            font-size: 12px;
-            color: #888;
-            line-height: 1.8;
-            margin-bottom: 32px;
-            letter-spacing: 0.5px;
-          }
-          .order-id {
-            background: rgba(201,168,76,0.08);
-            border: 1px solid rgba(201,168,76,0.2);
-            padding: 16px;
-            font-size: 13px;
-            color: #C9A84C;
-            letter-spacing: 2px;
-            margin-bottom: 32px;
-          }
-          .success-actions {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-            flex-wrap: wrap;
+          .success-card::after {
+            content: '';
+            position: absolute;
+            bottom: -1px; right: -1px;
+            width: 24px; height: 24px;
+            border-bottom: 2px solid #C9A84C;
+            border-right: 2px solid #C9A84C;
           }
         `}</style>
         <div className="success-page">
           <div className="success-card">
-            <div className="success-icon">
+            <div style={{
+              width: 72, height: 72,
+              borderRadius: '50%',
+              background: 'rgba(201,168,76,0.1)',
+              border: '1px solid rgba(201,168,76,0.3)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              margin: '0 auto 28px',
+              color: '#C9A84C'
+            }}>
               <FiCheck size={32} />
             </div>
-            <h2 className="success-title">Order <em>Placed!</em></h2>
-            <p className="success-sub">
-              Thank you, {user.name}! Your custom order has been received.
-              Our team will contact you on WhatsApp within 2 hours to confirm details.
+            <h2 style={{
+              fontFamily: "'Cormorant Garamond', serif",
+              fontSize: '42px', fontWeight: 300,
+              color: '#F5F0E8', marginBottom: '12px'
+            }}>
+              Order <em style={{ fontStyle: 'italic', color: '#C9A84C' }}>Placed!</em>
+            </h2>
+            <p style={{ fontSize: '12px', color: '#888', lineHeight: 1.8, marginBottom: '32px' }}>
+              Thank you, {user?.name}! 🎉<br />
+              Your custom order has been received.<br />
+              Our team will contact you on WhatsApp within 2 hours.
             </p>
-            <div className="order-id">
-              Order ID: LT{Date.now().toString().slice(-6)}
+            <div style={{
+              background: 'rgba(201,168,76,0.08)',
+              border: '1px solid rgba(201,168,76,0.2)',
+              padding: '16px', fontSize: '13px',
+              color: '#C9A84C', letterSpacing: '2px',
+              marginBottom: '32px'
+            }}>
+              Garment: {form.garment} · Size: {form.size}
             </div>
-            <div className="success-actions">
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
               <button
-                className="btn-primary"
+                style={{
+                  background: '#C9A84C', color: '#0A0A0A',
+                  border: 'none', padding: '14px 32px',
+                  fontSize: '11px', letterSpacing: '2px',
+                  textTransform: 'uppercase', cursor: 'pointer',
+                  fontFamily: "'Jost', sans-serif", fontWeight: 600
+                }}
                 onClick={() => navigate('/')}
               >
                 Back to Home
               </button>
               <button
-                className="btn-outline"
+                style={{
+                  background: 'transparent', color: '#C9A84C',
+                  border: '1px solid rgba(201,168,76,0.4)',
+                  padding: '14px 32px', fontSize: '11px',
+                  letterSpacing: '2px', textTransform: 'uppercase',
+                  cursor: 'pointer', fontFamily: "'Jost', sans-serif"
+                }}
                 onClick={() => navigate('/products')}
               >
                 Shop More
@@ -202,12 +201,25 @@ export default function Customize() {
   return (
     <>
       <style>{`
-        .customize-page {
-          min-height: 100vh;
-          padding: 100px 60px 80px;
-          background: #0A0A0A;
+        * { box-sizing: border-box; }
+
+       .customize-page {
+  min-height: 100vh;
+  padding: 100px 0 80px;
+  background: #0A0A0A;
+  width: 100vw;
+  margin: 0;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+        .customize-inner {
+          max-width: 900px;
+          margin: 0 auto;
+          padding: 0 24px;
         }
-        .back-btn-customize {
+
+        .back-btn-cust {
           display: flex;
           align-items: center;
           gap: 8px;
@@ -219,107 +231,172 @@ export default function Customize() {
           text-transform: uppercase;
           cursor: pointer;
           font-family: 'Jost', sans-serif;
-          margin-bottom: 32px;
+          margin-bottom: 40px;
           transition: color 0.2s;
           padding: 0;
         }
-        .back-btn-customize:hover { color: #C9A84C; }
+        .back-btn-cust:hover { color: #C9A84C; }
+
         /* STEPPER */
-        .stepper {
+        .cust-stepper {
           display: flex;
           align-items: center;
-          margin-bottom: 60px;
-          max-width: 600px;
+          margin-bottom: 48px;
+          max-width: 500px;
         }
-        .step-item {
+        .cust-step {
           display: flex;
           align-items: center;
           gap: 12px;
-          flex: 1;
         }
-        .step-circle {
-          width: 40px;
-          height: 40px;
+        .cust-step-circle {
+          width: 44px;
+          height: 44px;
           border-radius: 50%;
-          border: 1px solid rgba(201,168,76,0.3);
+          border: 1px solid rgba(201,168,76,0.25);
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 13px;
-          color: #888;
           font-family: 'Cormorant Garamond', serif;
+          font-size: 16px;
+          color: #555;
           flex-shrink: 0;
           transition: all 0.3s;
         }
-        .step-circle.active {
+        .cust-step-circle.active {
           background: #C9A84C;
           border-color: #C9A84C;
           color: #0A0A0A;
-          font-weight: 600;
+          font-weight: 700;
         }
-        .step-circle.done {
+        .cust-step-circle.done {
           background: rgba(201,168,76,0.15);
           border-color: #C9A84C;
           color: #C9A84C;
         }
-        .step-label {
+        .cust-step-label {
           font-size: 10px;
           letter-spacing: 2px;
           text-transform: uppercase;
-          color: #888;
+          color: #555;
+          font-family: 'Jost', sans-serif;
         }
-        .step-label.active { color: #C9A84C; }
-        .step-connector {
+        .cust-step-label.active { color: #C9A84C; }
+        .cust-connector {
           flex: 1;
           height: 1px;
-          background: rgba(201,168,76,0.15);
-          margin: 0 12px;
+          background: rgba(201,168,76,0.1);
+          margin: 0 16px;
+          min-width: 40px;
         }
-        .step-connector.done { background: #C9A84C; }
+        .cust-connector.done { background: #C9A84C; }
 
         /* FORM CARD */
-        .form-card {
-          max-width: 680px;
-          border: 1px solid rgba(201,168,76,0.15);
-          padding: 48px;
+        .cust-card {
           background: #111;
+          border: 1px solid rgba(201,168,76,0.12);
+          padding: 48px;
+          position: relative;
         }
-        .form-card-title {
+        .cust-card::before {
+  content: '';
+  position: absolute;
+  top: -1px; left: -1px;
+  width: 20px; height: 20px;
+  border-top: 2px solid #C9A84C;
+  border-left: 2px solid #C9A84C;
+}
+        .cust-card::after {
+          content: '';
+          position: absolute;
+          bottom: -1px; right: -1px;
+          width: 24px; height: 24px;
+          border-bottom: 2px solid #C9A84C;
+          border-right: 2px solid #C9A84C;
+        }
+
+        .cust-card-title {
           font-family: 'Cormorant Garamond', serif;
-          font-size: 32px;
+          font-size: 36px;
           font-weight: 300;
           color: #F5F0E8;
-          margin-bottom: 8px;
+          margin-bottom: 6px;
         }
-        .form-card-title em { font-style: italic; color: #C9A84C; }
-        .form-card-sub {
+        .cust-card-title em { font-style: italic; color: #C9A84C; }
+        .cust-card-sub {
           font-size: 12px;
-          color: #888;
-          margin-bottom: 36px;
+          color: #666;
           letter-spacing: 0.5px;
+          margin-bottom: 40px;
           line-height: 1.7;
         }
-        .error-box {
-          background: rgba(255,107,107,0.08);
-          border: 1px solid rgba(255,107,107,0.3);
-          padding: 12px 16px;
-          font-size: 12px;
-          color: #ff6b6b;
-          letter-spacing: 0.5px;
-          margin-bottom: 20px;
+
+        /* FORM ELEMENTS */
+        .cust-label {
+          display: block;
+          font-size: 9px;
+          letter-spacing: 3px;
+          text-transform: uppercase;
+          color: #C9A84C;
+          margin-bottom: 12px;
         }
-        .form-row {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 16px;
+        .cust-group { margin-bottom: 28px; }
+        .cust-select {
+          width: 100%;
+          background: #1A1A1A;
+          border: 1px solid rgba(201,168,76,0.2);
+          color: #F5F0E8;
+          padding: 14px 16px;
+          font-family: 'Jost', sans-serif;
+          font-size: 13px;
+          outline: none;
+          cursor: pointer;
+          transition: border-color 0.2s;
+          appearance: none;
+          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C9A84C' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+          background-repeat: no-repeat;
+          background-position: right 16px center;
+          padding-right: 40px;
         }
-        .size-row {
+        .cust-select:focus { border-color: #C9A84C; }
+        .cust-select option { background: #1A1A1A; color: #F5F0E8; }
+        .cust-input {
+          width: 100%;
+          background: #1A1A1A;
+          border: 1px solid rgba(201,168,76,0.2);
+          color: #F5F0E8;
+          padding: 14px 16px;
+          font-family: 'Jost', sans-serif;
+          font-size: 13px;
+          outline: none;
+          transition: border-color 0.2s;
+        }
+        .cust-input:focus { border-color: #C9A84C; }
+        .cust-input::placeholder { color: #444; }
+        .cust-textarea {
+          width: 100%;
+          background: #1A1A1A;
+          border: 1px solid rgba(201,168,76,0.2);
+          color: #F5F0E8;
+          padding: 14px 16px;
+          font-family: 'Jost', sans-serif;
+          font-size: 13px;
+          outline: none;
+          transition: border-color 0.2s;
+          resize: vertical;
+          min-height: 100px;
+        }
+        .cust-textarea:focus { border-color: #C9A84C; }
+        .cust-textarea::placeholder { color: #444; }
+
+        /* SIZE BUTTONS */
+        .size-grid {
           display: flex;
-          gap: 8px;
+          gap: 10px;
           flex-wrap: wrap;
         }
-        .size-btn {
-          padding: 10px 20px;
+        .size-btn-cust {
+          padding: 12px 22px;
           border: 1px solid rgba(201,168,76,0.2);
           background: transparent;
           color: #888;
@@ -327,413 +404,505 @@ export default function Customize() {
           font-size: 12px;
           cursor: pointer;
           transition: all 0.2s;
+          letter-spacing: 1px;
         }
-        .size-btn.active, .size-btn:hover {
+        .size-btn-cust:hover { border-color: #C9A84C; color: #C9A84C; }
+        .size-btn-cust.active {
           background: #C9A84C;
           border-color: #C9A84C;
           color: #0A0A0A;
+          font-weight: 600;
         }
-        .color-row {
+
+        /* COLOR PICKER */
+        .color-grid {
           display: flex;
-          gap: 10px;
+          gap: 12px;
           flex-wrap: wrap;
         }
-        .color-dot {
-          width: 34px;
-          height: 34px;
-          border-radius: 50%;
+        .color-item {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 6px;
           cursor: pointer;
-          border: 2px solid transparent;
-          transition: all 0.2s;
         }
-        .color-dot.active, .color-dot:hover {
+        .color-circle {
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          transition: all 0.2s;
+          border: 2px solid transparent;
+        }
+        .color-circle.active {
           border-color: #C9A84C;
           transform: scale(1.15);
+          box-shadow: 0 0 12px rgba(201,168,76,0.4);
         }
+        .color-name {
+          font-size: 8px;
+          color: #555;
+          letter-spacing: 1px;
+          text-align: center;
+          max-width: 48px;
+        }
+        .color-name.active { color: #C9A84C; }
+
+        /* UPLOAD BOX */
         .upload-box {
           border: 1px dashed rgba(201,168,76,0.3);
-          padding: 32px;
+          padding: 40px 24px;
           text-align: center;
           cursor: pointer;
           transition: all 0.3s;
+          background: rgba(201,168,76,0.02);
         }
         .upload-box:hover {
           border-color: #C9A84C;
-          background: rgba(201,168,76,0.03);
+          background: rgba(201,168,76,0.05);
+        }
+        .upload-box.uploaded {
+          border-color: #4CAF50;
+          background: rgba(76,175,80,0.05);
         }
         .upload-text {
           font-size: 11px;
           letter-spacing: 2px;
-          color: #888;
+          color: #666;
           text-transform: uppercase;
-          margin-top: 10px;
+          margin-top: 12px;
         }
-        .qty-row {
+        .upload-text.uploaded { color: #4CAF50; }
+
+        /* QUANTITY */
+        .qty-wrap {
           display: flex;
           align-items: center;
-          gap: 16px;
+          gap: 0;
+          border: 1px solid rgba(201,168,76,0.2);
+          width: fit-content;
         }
-        .qty-btn {
-          width: 36px;
-          height: 36px;
-          border: 1px solid rgba(201,168,76,0.3);
-          background: transparent;
+        .qty-btn-cust {
+          width: 48px;
+          height: 48px;
+          background: rgba(201,168,76,0.08);
+          border: none;
           color: #C9A84C;
-          font-size: 18px;
+          font-size: 20px;
           cursor: pointer;
           display: flex;
           align-items: center;
           justify-content: center;
           transition: all 0.2s;
+          font-family: 'Jost', sans-serif;
         }
-        .qty-btn:hover {
-          background: rgba(201,168,76,0.1);
-        }
-        .qty-num {
-          font-family: 'Cormorant Garamond', serif;
-          font-size: 28px;
-          color: #F5F0E8;
-          min-width: 32px;
+        .qty-btn-cust:hover { background: rgba(201,168,76,0.15); }
+        .qty-num-cust {
+          width: 64px;
           text-align: center;
+          font-family: 'Cormorant Garamond', serif;
+          font-size: 24px;
+          color: #F5F0E8;
+          border-left: 1px solid rgba(201,168,76,0.2);
+          border-right: 1px solid rgba(201,168,76,0.2);
+          padding: 10px 0;
         }
-        .payment-opts {
+
+        /* 2 COLUMN ROW */
+        .cust-row {
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: 12px;
+          gap: 20px;
         }
-        .pay-card {
+
+        /* PAYMENT CARDS */
+        .pay-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 16px;
+        }
+        .pay-card-cust {
           border: 1px solid rgba(201,168,76,0.15);
-          padding: 20px;
+          padding: 24px;
           cursor: pointer;
-          transition: all 0.2s;
+          transition: all 0.25s;
           text-align: center;
+          background: #1A1A1A;
         }
-        .pay-card:hover, .pay-card.active {
+        .pay-card-cust:hover { border-color: rgba(201,168,76,0.4); }
+        .pay-card-cust.active {
           border-color: #C9A84C;
           background: rgba(201,168,76,0.06);
         }
-        .pay-icon { font-size: 28px; margin-bottom: 8px; }
-        .pay-title {
+        .pay-card-icon { font-size: 32px; margin-bottom: 10px; }
+        .pay-card-title {
           font-size: 12px;
           letter-spacing: 2px;
           text-transform: uppercase;
           color: #F5F0E8;
           margin-bottom: 4px;
+          font-family: 'Jost', sans-serif;
         }
-        .pay-sub {
-          font-size: 11px;
+        .pay-card-sub { font-size: 11px; color: #666; }
+
+        /* ORDER SUMMARY BOX */
+        .summary-box {
+          background: rgba(201,168,76,0.04);
+          border: 1px solid rgba(201,168,76,0.12);
+          padding: 24px;
+          margin-bottom: 32px;
+        }
+        .summary-box-title {
+          font-size: 9px;
+          letter-spacing: 3px;
+          text-transform: uppercase;
+          color: #C9A84C;
+          margin-bottom: 16px;
+        }
+        .summary-row-cust {
+          display: flex;
+          justify-content: space-between;
+          font-size: 12px;
           color: #888;
+          padding: 6px 0;
+          border-bottom: 1px solid rgba(201,168,76,0.05);
         }
-        .input-icon-wrap {
-          position: relative;
+        .summary-row-cust span:last-child { color: #F5F0E8; }
+
+        /* ERROR */
+        .cust-error {
+          background: rgba(255,107,107,0.08);
+          border: 1px solid rgba(255,107,107,0.3);
+          padding: 12px 16px;
+          font-size: 12px;
+          color: #ff6b6b;
+          margin-bottom: 24px;
+          letter-spacing: 0.3px;
         }
-        .input-side-icon {
-          position: absolute;
-          left: 16px;
-          top: 50%;
-          transform: translateY(-50%);
-          color: #888;
-          pointer-events: none;
-        }
-        .input-pl {
-          padding-left: 44px !important;
-        }
-        .step-actions {
+
+        /* ACTIONS */
+        .cust-actions {
           display: flex;
           gap: 12px;
-          margin-top: 36px;
+          margin-top: 40px;
+          padding-top: 32px;
+          border-top: 1px solid rgba(201,168,76,0.08);
         }
-        .btn-back {
+        .cust-back-btn {
           background: transparent;
           border: 1px solid rgba(201,168,76,0.25);
           color: #888;
-          padding: 14px 32px;
+          padding: 16px 32px;
           font-size: 11px;
           letter-spacing: 2px;
           text-transform: uppercase;
           cursor: pointer;
           font-family: 'Jost', sans-serif;
           transition: all 0.2s;
+          flex-shrink: 0;
         }
-        .btn-back:hover {
+        .cust-back-btn:hover {
           border-color: #C9A84C;
           color: #C9A84C;
         }
-        .order-summary {
-          background: rgba(201,168,76,0.04);
-          border: 1px solid rgba(201,168,76,0.15);
-          padding: 20px;
-          margin-bottom: 28px;
-        }
-        .summary-title {
-          font-size: 10px;
+        .cust-next-btn {
+          flex: 1;
+          background: #C9A84C;
+          border: none;
+          color: #0A0A0A;
+          padding: 16px 32px;
+          font-size: 11px;
           letter-spacing: 3px;
           text-transform: uppercase;
-          color: #C9A84C;
-          margin-bottom: 14px;
+          cursor: pointer;
+          font-family: 'Jost', sans-serif;
+          font-weight: 700;
+          transition: all 0.2s;
         }
-        .summary-row {
-          display: flex;
-          justify-content: space-between;
-          font-size: 12px;
-          color: #888;
-          margin-bottom: 8px;
-          letter-spacing: 0.5px;
-        }
-        .summary-row span:last-child { color: #F5F0E8; }
+        .cust-next-btn:hover { background: #E8D5A3; }
 
         @media (max-width: 768px) {
-          .customize-page { padding: 100px 24px 60px; }
-          .form-card { padding: 28px 20px; }
-          .form-row { grid-template-columns: 1fr; }
-          .payment-opts { grid-template-columns: 1fr; }
-          .stepper { gap: 4px; }
-          .step-label { display: none; }
+          .customize-page { padding: 100px 0 60px; }
+          .cust-card { padding: 28px 20px; }
+          .cust-row { grid-template-columns: 1fr; }
+          .pay-grid { grid-template-columns: 1fr; }
+          .cust-step-label { display: none; }
+          .cust-connector { min-width: 24px; }
         }
       `}</style>
 
       <div className="customize-page">
-        <button className="back-btn-customize" onClick={() => navigate(-1)}>
-          <FiArrowLeft size={14} /> Back
-        </button>
+        <div className="customize-inner">
+          <button className="back-btn-cust" onClick={() => navigate(-1)}>
+            <FiArrowLeft size={14} /> Back
+          </button>
 
-        <p className="section-eyebrow">Custom Order</p>
-        <h1 className="section-title">Design Your<br /><em style={{ fontStyle: 'italic', color: '#C9A84C' }}>Perfect Piece</em></h1>
-        <div className="section-line"></div>
+          <p style={{ fontSize: '9px', letterSpacing: '5px', color: '#C9A84C', textTransform: 'uppercase', marginBottom: '12px' }}>
+            Custom Order
+          </p>
+          <h1 style={{
+            fontFamily: "'Cormorant Garamond', serif",
+            fontSize: 'clamp(40px, 6vw, 72px)',
+            fontWeight: 300,
+            color: '#F5F0E8',
+            marginBottom: '8px',
+            lineHeight: 1.1
+          }}>
+            Design Your<br />
+            <em style={{ fontStyle: 'italic', color: '#C9A84C' }}>Perfect Piece</em>
+          </h1>
+          <div style={{ width: 48, height: 1, background: '#C9A84C', marginBottom: '48px' }} />
 
-        {/* STEPPER */}
-        <div className="stepper">
-          {['Design', 'Payment', 'Delivery'].map((label, i) => (
-            <React.Fragment key={i}>
-              <div className="step-item">
-                <div className={`step-circle ${step === i + 1 ? 'active' : step > i + 1 ? 'done' : ''}`}>
-                  {step > i + 1 ? <FiCheck size={16} /> : i + 1}
+          {/* STEPPER */}
+          <div className="cust-stepper">
+            {['Design', 'Payment', 'Delivery'].map((label, i) => (
+              <React.Fragment key={i}>
+                <div className="cust-step">
+                  <div className={`cust-step-circle ${step === i + 1 ? 'active' : step > i + 1 ? 'done' : ''}`}>
+                    {step > i + 1 ? <FiCheck size={16} /> : i + 1}
+                  </div>
+                  <span className={`cust-step-label ${step === i + 1 ? 'active' : ''}`}>{label}</span>
                 </div>
-                <span className={`step-label ${step === i + 1 ? 'active' : ''}`}>{label}</span>
-              </div>
-              {i < 2 && (
-                <div className={`step-connector ${step > i + 1 ? 'done' : ''}`} />
-              )}
-            </React.Fragment>
-          ))}
-        </div>
+                {i < 2 && (
+                  <div className={`cust-connector ${step > i + 1 ? 'done' : ''}`} />
+                )}
+              </React.Fragment>
+            ))}
+          </div>
 
-        <div className="form-card">
+          {/* FORM CARD */}
+          <div className="cust-card">
 
-          {/* ── STEP 1 — DESIGN ── */}
-          {step === 1 && (
-            <>
-              <h2 className="form-card-title">Your <em>Design</em></h2>
-              <p className="form-card-sub">Choose your garment and tell us exactly what you want.</p>
+            {/* ── STEP 1 — DESIGN ── */}
+            {step === 1 && (
+              <>
+                <h2 className="cust-card-title">Your <em>Design</em></h2>
+                <p className="cust-card-sub">Choose your garment and tell us exactly what you want.</p>
 
-              {error && <div className="error-box">⚠ {error}</div>}
+                {error && <div className="cust-error">⚠ {error}</div>}
 
-              {/* GARMENT */}
-              <div className="form-group">
-                <label className="form-label">Select Garment *</label>
-                <select
-                  className="form-select"
-                  name="garment"
-                  value={form.garment}
-                  onChange={handleChange}
-                >
-                  <option value="">— Choose Item —</option>
-                  {['Shirt', 'T-Shirt', 'Girls Short Kurti', 'Jeans Short Kurta', 'Handkerchief'].map(g => (
-                    <option key={g}>{g}</option>
-                  ))}
-                </select>
-              </div>
+                <div className="cust-row">
+                  <div className="cust-group">
+                    <label className="cust-label">Select Garment *</label>
+                    <select className="cust-select" name="garment" value={form.garment} onChange={handleChange}>
+                      <option value="">— Choose Item —</option>
+                      {['Shirt', 'T-Shirt', 'Girls Short Kurti', 'Jeans Short Kurta', 'Handkerchief'].map(g => (
+                        <option key={g} value={g}>{g}</option>
+                      ))}
+                    </select>
+                  </div>
 
-              {/* SIZE */}
-              <div className="form-group">
-                <label className="form-label">Select Size *</label>
-                <div className="size-row">
-                  {['S', 'M', 'L', 'XL', 'XXL', 'Free Size'].map(s => (
-                    <button
-                      key={s}
-                      className={`size-btn ${form.size === s ? 'active' : ''}`}
-                      onClick={() => setForm({ ...form, size: s })}
-                    >
-                      {s}
-                    </button>
-                  ))}
+                  <div className="cust-group">
+                    <label className="cust-label">Design Placement</label>
+                    <select className="cust-select" name="placement" value={form.placement} onChange={handleChange}>
+                      <option value="">— Where to print? —</option>
+                      {['Front Center', 'Back Center', 'Left Chest', 'Right Chest', 'Sleeve', 'All Over'].map(p => (
+                        <option key={p} value={p}>{p}</option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
-              </div>
 
-              {/* COLOR */}
-              <div className="form-group">
-                <label className="form-label">Choose Color</label>
-                <div className="color-row">
-                  {colors.map((c, i) => (
-                    <div
-                      key={i}
-                      className={`color-dot ${form.color === c ? 'active' : ''}`}
-                      style={{
-                        background: c,
-                        border: c === '#FFFFFF'
-                          ? '2px solid #444'
-                          : form.color === c
-                            ? '2px solid #C9A84C'
-                            : '2px solid transparent',
-                      }}
-                      onClick={() => setForm({ ...form, color: c })}
-                    />
-                  ))}
+                <div className="cust-group">
+                  <label className="cust-label">Select Size *</label>
+                  <div className="size-grid">
+                    {['S', 'M', 'L', 'XL', 'XXL', 'Free Size'].map(s => (
+                      <button
+                        key={s}
+                        className={`size-btn-cust ${form.size === s ? 'active' : ''}`}
+                        onClick={() => setForm({ ...form, size: s })}
+                      >
+                        {s}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
 
-              {/* CUSTOM TEXT */}
-              <div className="form-group">
-                <label className="form-label">Custom Text / Name</label>
-                <input
-                  className="form-input"
-                  name="customText"
-                  placeholder="e.g. Rahul, Team 2024, Your Logo Text..."
-                  value={form.customText}
-                  onChange={handleChange}
-                />
-              </div>
+                <div className="cust-group">
+                  <label className="cust-label">Choose Fabric Color</label>
+                  <div className="color-grid">
+                    {colors.map((c, i) => (
+                      <div
+                        key={i}
+                        className="color-item"
+                        onClick={() => setForm({ ...form, color: c.hex })}
+                      >
+                        <div
+                          className={`color-circle ${form.color === c.hex ? 'active' : ''}`}
+                          style={{
+                            background: c.hex,
+                            border: c.hex === '#FFFFFF'
+                              ? form.color === c.hex
+                                ? '2px solid #C9A84C'
+                                : '2px solid #333'
+                              : form.color === c.hex
+                                ? '2px solid #C9A84C'
+                                : '2px solid transparent'
+                          }}
+                        />
+                        <span className={`color-name ${form.color === c.hex ? 'active' : ''}`}>
+                          {c.name}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
 
-              {/* PLACEMENT */}
-              <div className="form-group">
-                <label className="form-label">Design Placement</label>
-                <select
-                  className="form-select"
-                  name="placement"
-                  value={form.placement}
-                  onChange={handleChange}
-                >
-                  <option value="">— Where to print/embroider? —</option>
-                  <option>Front Center</option>
-                  <option>Back Center</option>
-                  <option>Left Chest</option>
-                  <option>Right Chest</option>
-                  <option>Sleeve</option>
-                  <option>All Over</option>
-                </select>
-              </div>
-
-              {/* UPLOAD */}
-              <div className="form-group">
-                <label className="form-label">Upload Your Design</label>
-                <div className="upload-box" onClick={() => document.getElementById('designFile').click()}>
-                  <FiUpload size={28} color="#C9A84C" style={{ opacity: 0.6 }} />
-                  <p className="upload-text">
-                    {form.fileName ? `✓ ${form.fileName}` : 'Click to upload image or design file'}
-                  </p>
+                <div className="cust-group">
+                  <label className="cust-label">Custom Text / Name</label>
                   <input
-                    id="designFile"
-                    type="file"
-                    accept="image/*,.pdf"
-                    style={{ display: 'none' }}
-                    onChange={handleFile}
+                    className="cust-input"
+                    name="customText"
+                    placeholder="e.g. Rahul, Team 2024, Your Logo Text..."
+                    value={form.customText}
+                    onChange={handleChange}
                   />
                 </div>
-              </div>
 
-              {/* QUANTITY */}
-              <div className="form-group">
-                <label className="form-label">Quantity</label>
-                <div className="qty-row">
-                  <button
-                    className="qty-btn"
-                    onClick={() => setForm({ ...form, quantity: Math.max(1, form.quantity - 1) })}
-                  >−</button>
-                  <span className="qty-num">{form.quantity}</span>
-                  <button
-                    className="qty-btn"
-                    onClick={() => setForm({ ...form, quantity: form.quantity + 1 })}
-                  >+</button>
-                </div>
-              </div>
-
-              {/* NOTES */}
-              <div className="form-group">
-                <label className="form-label">Special Instructions</label>
-                <textarea
-                  className="form-textarea"
-                  name="notes"
-                  placeholder="Any extra details, color preferences, references..."
-                  value={form.notes}
-                  onChange={handleChange}
-                />
-              </div>
-            </>
-          )}
-
-          {/* ── STEP 2 — PAYMENT ── */}
-          {step === 2 && (
-            <>
-              <h2 className="form-card-title">Choose <em>Payment</em></h2>
-              <p className="form-card-sub">Select how you would like to pay for your order.</p>
-
-              {error && <div className="error-box">⚠ {error}</div>}
-
-              {/* ORDER SUMMARY */}
-              <div className="order-summary">
-                <p className="summary-title">Order Summary</p>
-                <div className="summary-row"><span>Garment</span><span>{form.garment}</span></div>
-                <div className="summary-row"><span>Size</span><span>{form.size}</span></div>
-                {form.customText && <div className="summary-row"><span>Custom Text</span><span>{form.customText}</span></div>}
-                {form.placement && <div className="summary-row"><span>Placement</span><span>{form.placement}</span></div>}
-                <div className="summary-row"><span>Quantity</span><span>{form.quantity}</span></div>
-                {form.fileName && <div className="summary-row"><span>Design File</span><span>✓ Uploaded</span></div>}
-              </div>
-
-              {/* PAYMENT OPTIONS */}
-              <div className="form-group">
-                <label className="form-label">Payment Method *</label>
-                <div className="payment-opts">
+                <div className="cust-group">
+                  <label className="cust-label">Upload Your Design</label>
                   <div
-                    className={`pay-card ${form.paymentMethod === 'cod' ? 'active' : ''}`}
-                    onClick={() => setForm({ ...form, paymentMethod: 'cod' })}
+                    className={`upload-box ${form.fileName ? 'uploaded' : ''}`}
+                    onClick={() => document.getElementById('designFile').click()}
                   >
-                    <div className="pay-icon">🚚</div>
-                    <div className="pay-title">Cash on Delivery</div>
-                    <div className="pay-sub">Pay when you receive</div>
-                  </div>
-                  <div
-                    className={`pay-card ${form.paymentMethod === 'online' ? 'active' : ''}`}
-                    onClick={() => setForm({ ...form, paymentMethod: 'online' })}
-                  >
-                    <div className="pay-icon">📱</div>
-                    <div className="pay-title">Online Payment</div>
-                    <div className="pay-sub">UPI, Card, Net Banking</div>
-                  </div>
-                </div>
-              </div>
-            </>
-          )}
-
-          {/* ── STEP 3 — DELIVERY ── */}
-          {step === 3 && (
-            <>
-              <h2 className="form-card-title">Delivery <em>Details</em></h2>
-              <p className="form-card-sub">Where should we send your order?</p>
-
-              {error && <div className="error-box">⚠ {error}</div>}
-
-              {/* NAME & PHONE */}
-              <div className="form-row">
-                <div className="form-group">
-                  <label className="form-label">Full Name *</label>
-                  <div className="input-icon-wrap">
-                    <FiUser size={14} className="input-side-icon" />
+                    <FiUpload size={28} color={form.fileName ? '#4CAF50' : '#C9A84C'} style={{ opacity: 0.7 }} />
+                    <p className={`upload-text ${form.fileName ? 'uploaded' : ''}`}>
+                      {form.fileName ? `✓ ${form.fileName}` : 'Click to upload image or design file'}
+                    </p>
+                    <p style={{ fontSize: '10px', color: '#444', marginTop: '6px' }}>
+                      JPG, PNG, PDF supported
+                    </p>
                     <input
-                      className="form-input input-pl"
+                      id="designFile"
+                      type="file"
+                      accept="image/*,.pdf"
+                      style={{ display: 'none' }}
+                      onChange={handleFile}
+                    />
+                  </div>
+                </div>
+
+                <div className="cust-group">
+                  <label className="cust-label">Quantity</label>
+                  <div className="qty-wrap">
+                    <button
+                      className="qty-btn-cust"
+                      onClick={() => setForm({ ...form, quantity: Math.max(1, form.quantity - 1) })}
+                    >−</button>
+                    <span className="qty-num-cust">{form.quantity}</span>
+                    <button
+                      className="qty-btn-cust"
+                      onClick={() => setForm({ ...form, quantity: form.quantity + 1 })}
+                    >+</button>
+                  </div>
+                </div>
+
+                <div className="cust-group">
+                  <label className="cust-label">Special Instructions</label>
+                  <textarea
+                    className="cust-textarea"
+                    name="notes"
+                    placeholder="Any extra details, color preferences, references, inspirations..."
+                    value={form.notes}
+                    onChange={handleChange}
+                  />
+                </div>
+              </>
+            )}
+
+            {/* ── STEP 2 — PAYMENT ── */}
+            {step === 2 && (
+              <>
+                <h2 className="cust-card-title">Choose <em>Payment</em></h2>
+                <p className="cust-card-sub">Select how you would like to pay for your custom order.</p>
+
+                {error && <div className="cust-error">⚠ {error}</div>}
+
+                <div className="summary-box">
+                  <p className="summary-box-title">Order Summary</p>
+                  {[
+                    ['Garment', form.garment],
+                    ['Size', form.size],
+                    ['Color', form.color ? '●' : '—'],
+                    ['Placement', form.placement || '—'],
+                    ['Custom Text', form.customText || '—'],
+                    ['Quantity', form.quantity],
+                    ['Design File', form.fileName ? '✓ Uploaded' : '—'],
+                  ].map(([label, value], i) => (
+                    <div className="summary-row-cust" key={i}>
+                      <span>{label}</span>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        {label === 'Color' && form.color && (
+                          <span style={{ width: 14, height: 14, borderRadius: '50%', background: form.color, border: '1px solid #333', display: 'inline-block' }} />
+                        )}
+                        {value}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="cust-group">
+                  <label className="cust-label">Payment Method *</label>
+                  <div className="pay-grid">
+                    <div
+                      className={`pay-card-cust ${form.paymentMethod === 'cod' ? 'active' : ''}`}
+                      onClick={() => setForm({ ...form, paymentMethod: 'cod' })}
+                    >
+                      <div className="pay-card-icon">🚚</div>
+                      <div className="pay-card-title">Cash on Delivery</div>
+                      <p className="pay-card-sub">Pay when you receive</p>
+                    </div>
+                    <div
+                      className={`pay-card-cust ${form.paymentMethod === 'online' ? 'active' : ''}`}
+                      onClick={() => setForm({ ...form, paymentMethod: 'online' })}
+                    >
+                      <div className="pay-card-icon">📱</div>
+                      <div className="pay-card-title">Online Payment</div>
+                      <p className="pay-card-sub">UPI, Card, Net Banking</p>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* ── STEP 3 — DELIVERY ── */}
+            {step === 3 && (
+              <>
+                <h2 className="cust-card-title">Delivery <em>Details</em></h2>
+                <p className="cust-card-sub">Where should we send your custom order?</p>
+
+                {error && <div className="cust-error">⚠ {error}</div>}
+
+                <div className="summary-box">
+                  <p className="summary-box-title">Final Order Summary</p>
+                  {[
+                    ['Garment', form.garment],
+                    ['Size', form.size],
+                    ['Quantity', form.quantity],
+                    ['Payment', form.paymentMethod === 'cod' ? 'Cash on Delivery' : 'Online Payment'],
+                  ].map(([label, value], i) => (
+                    <div className="summary-row-cust" key={i}>
+                      <span>{label}</span>
+                      <span>{value}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="cust-row">
+                  <div className="cust-group">
+                    <label className="cust-label">Full Name *</label>
+                    <input
+                      className="cust-input"
                       name="name"
                       placeholder="Your name"
                       value={form.name}
                       onChange={handleChange}
                     />
                   </div>
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Phone Number *</label>
-                  <div className="input-icon-wrap">
-                    <FiPhone size={14} className="input-side-icon" />
+                  <div className="cust-group">
+                    <label className="cust-label">Phone Number *</label>
                     <input
-                      className="form-input input-pl"
+                      className="cust-input"
                       name="phone"
                       placeholder="10-digit number"
                       value={form.phone}
@@ -742,79 +911,54 @@ export default function Customize() {
                     />
                   </div>
                 </div>
-              </div>
 
-              {/* ADDRESS */}
-              <div className="form-group">
-                <label className="form-label">Full Address *</label>
-                <div className="input-icon-wrap">
-                  <FiMapPin size={14} className="input-side-icon" />
+                <div className="cust-group">
+                  <label className="cust-label">Full Address *</label>
                   <input
-                    className="form-input input-pl"
+                    className="cust-input"
                     name="address"
                     placeholder="House no, Street, Area..."
                     value={form.address}
                     onChange={handleChange}
                   />
                 </div>
-              </div>
 
-              {/* CITY & PINCODE */}
-              <div className="form-row">
-                <div className="form-group">
-                  <label className="form-label">City *</label>
-                  <input
-                    className="form-input"
-                    name="city"
-                    placeholder="Your city"
-                    value={form.city}
-                    onChange={handleChange}
-                  />
+                <div className="cust-row">
+                  <div className="cust-group">
+                    <label className="cust-label">City *</label>
+                    <input
+                      className="cust-input"
+                      name="city"
+                      placeholder="Your city"
+                      value={form.city}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div className="cust-group">
+                    <label className="cust-label">Pincode *</label>
+                    <input
+                      className="cust-input"
+                      name="pincode"
+                      placeholder="6-digit pincode"
+                      value={form.pincode}
+                      onChange={handleChange}
+                      maxLength={6}
+                    />
+                  </div>
                 </div>
-                <div className="form-group">
-                  <label className="form-label">Pincode *</label>
-                  <input
-                    className="form-input"
-                    name="pincode"
-                    placeholder="6-digit pincode"
-                    value={form.pincode}
-                    onChange={handleChange}
-                    maxLength={6}
-                  />
-                </div>
-              </div>
+              </>
+            )}
 
-              {/* FINAL SUMMARY */}
-              <div className="order-summary">
-                <p className="summary-title">Final Order Summary</p>
-                <div className="summary-row"><span>Garment</span><span>{form.garment}</span></div>
-                <div className="summary-row"><span>Size</span><span>{form.size}</span></div>
-                <div className="summary-row"><span>Quantity</span><span>{form.quantity}</span></div>
-                <div className="summary-row">
-                  <span>Payment</span>
-                  <span>{form.paymentMethod === 'cod' ? 'Cash on Delivery' : 'Online Payment'}</span>
-                </div>
-              </div>
-            </>
-          )}
-
-          {/* NAVIGATION BUTTONS */}
-          <div className="step-actions">
-            <button className="btn-back" onClick={prevStep}>
-              ← Back
-            </button>
-            <button
-              className="btn-primary"
-              style={{ flex: 1, padding: '16px', fontSize: '11px', letterSpacing: '2px' }}
-              onClick={nextStep}
-            >
-              {step === 3
-                ? <><FiShoppingBag size={14} style={{ marginRight: 8 }} /> Place Order</>
-                : 'Continue →'
-              }
-            </button>
+            {/* ACTIONS */}
+            <div className="cust-actions">
+              <button className="cust-back-btn" onClick={prevStep}>
+                ← Back
+              </button>
+              <button className="cust-next-btn" onClick={nextStep}>
+                {step === 3 ? '✓ Place Order' : 'Continue →'}
+              </button>
+            </div>
           </div>
-
         </div>
       </div>
     </>
