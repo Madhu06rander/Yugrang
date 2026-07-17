@@ -1333,6 +1333,41 @@ export default function Products() {
                   </div>
                 )}
                 {p.badge && <span className="product-badge">{p.badge}</span>}
+
+                {p.category !== 'Women Kurti' && p.category !== 'Handkerchief' && (
+                  <div style={{
+                    position: 'absolute',
+                    inset: 0,
+                    background: 'rgba(0,0,0,0.65)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px',
+                    zIndex: 3,
+                  }}>
+                    <div style={{
+                      border: '1px solid rgba(201,168,76,0.6)',
+                      padding: '8px 20px',
+                      fontSize: '10px',
+                      letterSpacing: '4px',
+                      textTransform: 'uppercase',
+                      color: '#C9A84C',
+                      fontFamily: "'Jost', sans-serif",
+                      background: 'rgba(0,0,0,0.6)',
+                    }}>
+                      Coming Soon
+                    </div>
+                    <p style={{
+                      fontSize: '10px',
+                      color: '#888',
+                      letterSpacing: '1px',
+                      margin: 0,
+                    }}>
+                      Available Soon!
+                    </p>
+                  </div>
+                )}
                 <button
                   onClick={(e) => {
                     e.stopPropagation();

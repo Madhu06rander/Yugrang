@@ -14,6 +14,8 @@ export default function Customize() {
     garment: prefill.product || '',
     size: prefill.size || '',
     color: prefill.color || '',
+    complexity: '',
+    price: 0,
     customText: '',
     placement: '',
     notes: '',
@@ -42,6 +44,17 @@ export default function Customize() {
     { hex: '#40E0D0', name: 'Turquoise' },
   ];
 
+  const complexityOptions = form.garment === 'Handkerchief' ? [
+    { level: 'Simple', desc: 'Naam / Text print', price: 149 },
+    { level: 'Medium', desc: 'Design + Text', price: 199 },
+    { level: 'Complex', desc: 'Full custom design', price: 249 },
+  ] : form.garment ? [
+    { level: 'Simple', desc: 'Basic print', price: 749 },
+    { level: 'Medium', desc: 'Multiple colors / design', price: 949 },
+    { level: 'Complex', desc: 'Detailed artwork', price: 1199 },
+    { level: 'Hand Painted', desc: 'Full hand painted', price: 1499 },
+  ] : [];
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -54,6 +67,7 @@ export default function Customize() {
 
   const validateStep1 = () => {
     if (!form.garment) { setError('Please select a garment.'); return false; }
+    if (!form.complexity) { setError('Please select design complexity.'); return false; }
     if (!form.size) { setError('Please select a size.'); return false; }
     return true;
   };
@@ -89,6 +103,8 @@ export default function Customize() {
     if (step === 1) { navigate(-1); return; }
     setStep(step - 1);
   };
+
+  const totalPrice = form.price * form.quantity;
 
   const placeOrder = () => {
     setOrderPlaced(true);
@@ -152,7 +168,7 @@ export default function Customize() {
             }}>
               Order <em style={{ fontStyle: 'italic', color: '#C9A84C' }}>Placed!</em>
             </h2>
-            <p style={{ fontSize: '12px', color: '#888', lineHeight: 1.8, marginBottom: '32px' }}>
+            <p style={{ fontSize: '12px', color: '#888', lineHeight: 1.8, marginBottom: '24px' }}>
               Thank you, {user?.name}! 🎉<br />
               Your custom order has been received.<br />
               Our team will contact you on WhatsApp within 2 hours.
@@ -162,9 +178,9 @@ export default function Customize() {
               border: '1px solid rgba(201,168,76,0.2)',
               padding: '16px', fontSize: '13px',
               color: '#C9A84C', letterSpacing: '2px',
-              marginBottom: '32px'
+              marginBottom: '16px'
             }}>
-              Garment: {form.garment} · Size: {form.size}
+              {form.garment} · {form.complexity} · ₹{totalPrice}
             </div>
             <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
               <button
@@ -202,23 +218,17 @@ export default function Customize() {
     <>
       <style>{`
         * { box-sizing: border-box; }
-
-       .customize-page {
-  min-height: 100vh;
-  padding: 100px 0 80px;
-  background: #0A0A0A;
-  width: 100vw;
-  margin: 0;
-  box-sizing: border-box;
-  overflow-x: hidden;
-}
-
+        .customize-page {
+          min-height: 100vh;
+          padding: 100px 0 80px;
+          background: #0A0A0A;
+          width: 100%;
+        }
         .customize-inner {
           max-width: 900px;
           margin: 0 auto;
-          padding: 0 24px;
+          padding: 0 40px;
         }
-
         .back-btn-cust {
           display: flex;
           align-items: center;
@@ -236,76 +246,55 @@ export default function Customize() {
           padding: 0;
         }
         .back-btn-cust:hover { color: #C9A84C; }
-
-        /* STEPPER */
         .cust-stepper {
           display: flex;
           align-items: center;
           margin-bottom: 48px;
           max-width: 500px;
         }
-        .cust-step {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-        }
+        .cust-step { display: flex; align-items: center; gap: 12px; }
         .cust-step-circle {
-          width: 44px;
-          height: 44px;
+          width: 44px; height: 44px;
           border-radius: 50%;
           border: 1px solid rgba(201,168,76,0.25);
-          display: flex;
-          align-items: center;
-          justify-content: center;
+          display: flex; align-items: center; justify-content: center;
           font-family: 'Cormorant Garamond', serif;
-          font-size: 16px;
-          color: #555;
-          flex-shrink: 0;
-          transition: all 0.3s;
+          font-size: 16px; color: #555;
+          flex-shrink: 0; transition: all 0.3s;
         }
         .cust-step-circle.active {
-          background: #C9A84C;
-          border-color: #C9A84C;
-          color: #0A0A0A;
-          font-weight: 700;
+          background: #C9A84C; border-color: #C9A84C;
+          color: #0A0A0A; font-weight: 700;
         }
         .cust-step-circle.done {
           background: rgba(201,168,76,0.15);
-          border-color: #C9A84C;
-          color: #C9A84C;
+          border-color: #C9A84C; color: #C9A84C;
         }
         .cust-step-label {
-          font-size: 10px;
-          letter-spacing: 2px;
-          text-transform: uppercase;
-          color: #555;
+          font-size: 10px; letter-spacing: 2px;
+          text-transform: uppercase; color: #555;
           font-family: 'Jost', sans-serif;
         }
         .cust-step-label.active { color: #C9A84C; }
         .cust-connector {
-          flex: 1;
-          height: 1px;
+          flex: 1; height: 1px;
           background: rgba(201,168,76,0.1);
-          margin: 0 16px;
-          min-width: 40px;
+          margin: 0 16px; min-width: 40px;
         }
         .cust-connector.done { background: #C9A84C; }
-
-        /* FORM CARD */
         .cust-card {
           background: #111;
           border: 1px solid rgba(201,168,76,0.12);
-          padding: 48px;
-          position: relative;
+          padding: 48px; position: relative;
         }
         .cust-card::before {
-  content: '';
-  position: absolute;
-  top: -1px; left: -1px;
-  width: 20px; height: 20px;
-  border-top: 2px solid #C9A84C;
-  border-left: 2px solid #C9A84C;
-}
+          content: '';
+          position: absolute;
+          top: -1px; left: -1px;
+          width: 24px; height: 24px;
+          border-top: 2px solid #C9A84C;
+          border-left: 2px solid #C9A84C;
+        }
         .cust-card::after {
           content: '';
           position: absolute;
@@ -314,44 +303,28 @@ export default function Customize() {
           border-bottom: 2px solid #C9A84C;
           border-right: 2px solid #C9A84C;
         }
-
         .cust-card-title {
           font-family: 'Cormorant Garamond', serif;
-          font-size: 36px;
-          font-weight: 300;
-          color: #F5F0E8;
-          margin-bottom: 6px;
+          font-size: 36px; font-weight: 300;
+          color: #F5F0E8; margin-bottom: 6px;
         }
         .cust-card-title em { font-style: italic; color: #C9A84C; }
         .cust-card-sub {
-          font-size: 12px;
-          color: #666;
-          letter-spacing: 0.5px;
-          margin-bottom: 40px;
-          line-height: 1.7;
+          font-size: 12px; color: #666;
+          letter-spacing: 0.5px; margin-bottom: 40px; line-height: 1.7;
         }
-
-        /* FORM ELEMENTS */
         .cust-label {
-          display: block;
-          font-size: 9px;
-          letter-spacing: 3px;
-          text-transform: uppercase;
-          color: #C9A84C;
-          margin-bottom: 12px;
+          display: block; font-size: 9px;
+          letter-spacing: 3px; text-transform: uppercase;
+          color: #C9A84C; margin-bottom: 12px;
         }
         .cust-group { margin-bottom: 28px; }
         .cust-select {
-          width: 100%;
-          background: #1A1A1A;
+          width: 100%; background: #1A1A1A;
           border: 1px solid rgba(201,168,76,0.2);
-          color: #F5F0E8;
-          padding: 14px 16px;
-          font-family: 'Jost', sans-serif;
-          font-size: 13px;
-          outline: none;
-          cursor: pointer;
-          transition: border-color 0.2s;
+          color: #F5F0E8; padding: 14px 16px;
+          font-family: 'Jost', sans-serif; font-size: 13px;
+          outline: none; cursor: pointer; transition: border-color 0.2s;
           appearance: none;
           background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C9A84C' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
           background-repeat: no-repeat;
@@ -361,78 +334,45 @@ export default function Customize() {
         .cust-select:focus { border-color: #C9A84C; }
         .cust-select option { background: #1A1A1A; color: #F5F0E8; }
         .cust-input {
-          width: 100%;
-          background: #1A1A1A;
+          width: 100%; background: #1A1A1A;
           border: 1px solid rgba(201,168,76,0.2);
-          color: #F5F0E8;
-          padding: 14px 16px;
-          font-family: 'Jost', sans-serif;
-          font-size: 13px;
-          outline: none;
-          transition: border-color 0.2s;
+          color: #F5F0E8; padding: 14px 16px;
+          font-family: 'Jost', sans-serif; font-size: 13px;
+          outline: none; transition: border-color 0.2s;
         }
         .cust-input:focus { border-color: #C9A84C; }
         .cust-input::placeholder { color: #444; }
         .cust-textarea {
-          width: 100%;
-          background: #1A1A1A;
+          width: 100%; background: #1A1A1A;
           border: 1px solid rgba(201,168,76,0.2);
-          color: #F5F0E8;
-          padding: 14px 16px;
-          font-family: 'Jost', sans-serif;
-          font-size: 13px;
-          outline: none;
-          transition: border-color 0.2s;
-          resize: vertical;
-          min-height: 100px;
+          color: #F5F0E8; padding: 14px 16px;
+          font-family: 'Jost', sans-serif; font-size: 13px;
+          outline: none; transition: border-color 0.2s;
+          resize: vertical; min-height: 100px;
         }
         .cust-textarea:focus { border-color: #C9A84C; }
         .cust-textarea::placeholder { color: #444; }
-
-        /* SIZE BUTTONS */
-        .size-grid {
-          display: flex;
-          gap: 10px;
-          flex-wrap: wrap;
-        }
+        .size-grid { display: flex; gap: 10px; flex-wrap: wrap; }
         .size-btn-cust {
           padding: 12px 22px;
           border: 1px solid rgba(201,168,76,0.2);
-          background: transparent;
-          color: #888;
-          font-family: 'Jost', sans-serif;
-          font-size: 12px;
-          cursor: pointer;
-          transition: all 0.2s;
-          letter-spacing: 1px;
+          background: transparent; color: #888;
+          font-family: 'Jost', sans-serif; font-size: 12px;
+          cursor: pointer; transition: all 0.2s; letter-spacing: 1px;
         }
         .size-btn-cust:hover { border-color: #C9A84C; color: #C9A84C; }
         .size-btn-cust.active {
-          background: #C9A84C;
-          border-color: #C9A84C;
-          color: #0A0A0A;
-          font-weight: 600;
+          background: #C9A84C; border-color: #C9A84C;
+          color: #0A0A0A; font-weight: 600;
         }
-
-        /* COLOR PICKER */
-        .color-grid {
-          display: flex;
-          gap: 12px;
-          flex-wrap: wrap;
-        }
+        .color-grid { display: flex; gap: 12px; flex-wrap: wrap; }
         .color-item {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 6px;
-          cursor: pointer;
+          display: flex; flex-direction: column;
+          align-items: center; gap: 6px; cursor: pointer;
         }
         .color-circle {
-          width: 36px;
-          height: 36px;
-          border-radius: 50%;
-          transition: all 0.2s;
-          border: 2px solid transparent;
+          width: 36px; height: 36px; border-radius: 50%;
+          transition: all 0.2s; border: 2px solid transparent;
         }
         .color-circle.active {
           border-color: #C9A84C;
@@ -440,21 +380,14 @@ export default function Customize() {
           box-shadow: 0 0 12px rgba(201,168,76,0.4);
         }
         .color-name {
-          font-size: 8px;
-          color: #555;
-          letter-spacing: 1px;
-          text-align: center;
-          max-width: 48px;
+          font-size: 8px; color: #555;
+          letter-spacing: 1px; text-align: center; max-width: 48px;
         }
         .color-name.active { color: #C9A84C; }
-
-        /* UPLOAD BOX */
         .upload-box {
           border: 1px dashed rgba(201,168,76,0.3);
-          padding: 40px 24px;
-          text-align: center;
-          cursor: pointer;
-          transition: all 0.3s;
+          padding: 40px 24px; text-align: center;
+          cursor: pointer; transition: all 0.3s;
           background: rgba(201,168,76,0.02);
         }
         .upload-box:hover {
@@ -466,56 +399,37 @@ export default function Customize() {
           background: rgba(76,175,80,0.05);
         }
         .upload-text {
-          font-size: 11px;
-          letter-spacing: 2px;
-          color: #666;
-          text-transform: uppercase;
-          margin-top: 12px;
+          font-size: 11px; letter-spacing: 2px;
+          color: #666; text-transform: uppercase; margin-top: 12px;
         }
         .upload-text.uploaded { color: #4CAF50; }
-
-        /* QUANTITY */
         .qty-wrap {
-          display: flex;
-          align-items: center;
-          gap: 0;
-          border: 1px solid rgba(201,168,76,0.2);
+          display: flex; align-items: center;
+          gap: 0; border: 1px solid rgba(201,168,76,0.2);
           width: fit-content;
         }
         .qty-btn-cust {
-          width: 48px;
-          height: 48px;
+          width: 48px; height: 48px;
           background: rgba(201,168,76,0.08);
-          border: none;
-          color: #C9A84C;
-          font-size: 20px;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: all 0.2s;
-          font-family: 'Jost', sans-serif;
+          border: none; color: #C9A84C; font-size: 20px;
+          cursor: pointer; display: flex;
+          align-items: center; justify-content: center;
+          transition: all 0.2s; font-family: 'Jost', sans-serif;
         }
         .qty-btn-cust:hover { background: rgba(201,168,76,0.15); }
         .qty-num-cust {
-          width: 64px;
-          text-align: center;
+          width: 64px; text-align: center;
           font-family: 'Cormorant Garamond', serif;
-          font-size: 24px;
-          color: #F5F0E8;
+          font-size: 24px; color: #F5F0E8;
           border-left: 1px solid rgba(201,168,76,0.2);
           border-right: 1px solid rgba(201,168,76,0.2);
           padding: 10px 0;
         }
-
-        /* 2 COLUMN ROW */
         .cust-row {
           display: grid;
           grid-template-columns: 1fr 1fr;
           gap: 20px;
         }
-
-        /* PAYMENT CARDS */
         .pay-grid {
           display: grid;
           grid-template-columns: 1fr 1fr;
@@ -523,10 +437,8 @@ export default function Customize() {
         }
         .pay-card-cust {
           border: 1px solid rgba(201,168,76,0.15);
-          padding: 24px;
-          cursor: pointer;
-          transition: all 0.25s;
-          text-align: center;
+          padding: 24px; cursor: pointer;
+          transition: all 0.25s; text-align: center;
           background: #1A1A1A;
         }
         .pay-card-cust:hover { border-color: rgba(201,168,76,0.4); }
@@ -536,91 +448,70 @@ export default function Customize() {
         }
         .pay-card-icon { font-size: 32px; margin-bottom: 10px; }
         .pay-card-title {
-          font-size: 12px;
-          letter-spacing: 2px;
-          text-transform: uppercase;
-          color: #F5F0E8;
-          margin-bottom: 4px;
-          font-family: 'Jost', sans-serif;
+          font-size: 12px; letter-spacing: 2px;
+          text-transform: uppercase; color: #F5F0E8;
+          margin-bottom: 4px; font-family: 'Jost', sans-serif;
         }
         .pay-card-sub { font-size: 11px; color: #666; }
-
-        /* ORDER SUMMARY BOX */
         .summary-box {
           background: rgba(201,168,76,0.04);
           border: 1px solid rgba(201,168,76,0.12);
-          padding: 24px;
-          margin-bottom: 32px;
+          padding: 24px; margin-bottom: 32px;
         }
         .summary-box-title {
-          font-size: 9px;
-          letter-spacing: 3px;
-          text-transform: uppercase;
-          color: #C9A84C;
-          margin-bottom: 16px;
+          font-size: 9px; letter-spacing: 3px;
+          text-transform: uppercase; color: #C9A84C; margin-bottom: 16px;
         }
         .summary-row-cust {
-          display: flex;
-          justify-content: space-between;
-          font-size: 12px;
-          color: #888;
+          display: flex; justify-content: space-between;
+          font-size: 12px; color: #888;
           padding: 6px 0;
           border-bottom: 1px solid rgba(201,168,76,0.05);
         }
         .summary-row-cust span:last-child { color: #F5F0E8; }
-
-        /* ERROR */
         .cust-error {
           background: rgba(255,107,107,0.08);
           border: 1px solid rgba(255,107,107,0.3);
-          padding: 12px 16px;
-          font-size: 12px;
-          color: #ff6b6b;
-          margin-bottom: 24px;
-          letter-spacing: 0.3px;
+          padding: 12px 16px; font-size: 12px;
+          color: #ff6b6b; margin-bottom: 24px; letter-spacing: 0.3px;
         }
-
-        /* ACTIONS */
         .cust-actions {
-          display: flex;
-          gap: 12px;
-          margin-top: 40px;
+          display: flex; gap: 12px; margin-top: 40px;
           padding-top: 32px;
           border-top: 1px solid rgba(201,168,76,0.08);
         }
         .cust-back-btn {
           background: transparent;
           border: 1px solid rgba(201,168,76,0.25);
-          color: #888;
-          padding: 16px 32px;
-          font-size: 11px;
-          letter-spacing: 2px;
-          text-transform: uppercase;
-          cursor: pointer;
-          font-family: 'Jost', sans-serif;
-          transition: all 0.2s;
-          flex-shrink: 0;
+          color: #888; padding: 16px 32px;
+          font-size: 11px; letter-spacing: 2px;
+          text-transform: uppercase; cursor: pointer;
+          font-family: 'Jost', sans-serif; transition: all 0.2s; flex-shrink: 0;
         }
-        .cust-back-btn:hover {
-          border-color: #C9A84C;
-          color: #C9A84C;
-        }
+        .cust-back-btn:hover { border-color: #C9A84C; color: #C9A84C; }
         .cust-next-btn {
-          flex: 1;
-          background: #C9A84C;
-          border: none;
-          color: #0A0A0A;
-          padding: 16px 32px;
-          font-size: 11px;
-          letter-spacing: 3px;
-          text-transform: uppercase;
-          cursor: pointer;
-          font-family: 'Jost', sans-serif;
-          font-weight: 700;
+          flex: 1; background: #C9A84C; border: none;
+          color: #0A0A0A; padding: 16px 32px;
+          font-size: 11px; letter-spacing: 3px;
+          text-transform: uppercase; cursor: pointer;
+          font-family: 'Jost', sans-serif; font-weight: 700;
           transition: all 0.2s;
         }
         .cust-next-btn:hover { background: #E8D5A3; }
-
+        .complexity-option {
+          border: 1px solid rgba(201,168,76,0.15);
+          padding: 14px 16px; cursor: pointer;
+          display: flex; justify-content: space-between;
+          align-items: center; transition: all 0.2s;
+          margin-bottom: 10px;
+        }
+        .complexity-option:hover {
+          border-color: rgba(201,168,76,0.4);
+        }
+        .complexity-option.active {
+          border-color: #C9A84C;
+          background: rgba(201,168,76,0.08);
+        }
         @media (max-width: 768px) {
           .customize-page { padding: 100px 0 60px; }
           .cust-card { padding: 28px 20px; }
@@ -628,6 +519,7 @@ export default function Customize() {
           .pay-grid { grid-template-columns: 1fr; }
           .cust-step-label { display: none; }
           .cust-connector { min-width: 24px; }
+          .customize-inner { padding: 0 24px; }
         }
       `}</style>
 
@@ -643,10 +535,8 @@ export default function Customize() {
           <h1 style={{
             fontFamily: "'Cormorant Garamond', serif",
             fontSize: 'clamp(40px, 6vw, 72px)',
-            fontWeight: 300,
-            color: '#F5F0E8',
-            marginBottom: '8px',
-            lineHeight: 1.1
+            fontWeight: 300, color: '#F5F0E8',
+            marginBottom: '8px', lineHeight: 1.1
           }}>
             Design Your<br />
             <em style={{ fontStyle: 'italic', color: '#C9A84C' }}>Perfect Piece</em>
@@ -670,7 +560,6 @@ export default function Customize() {
             ))}
           </div>
 
-          {/* FORM CARD */}
           <div className="cust-card">
 
             {/* ── STEP 1 — DESIGN ── */}
@@ -684,11 +573,18 @@ export default function Customize() {
                 <div className="cust-row">
                   <div className="cust-group">
                     <label className="cust-label">Select Garment *</label>
-                    <select className="cust-select" name="garment" value={form.garment} onChange={handleChange}>
+                    <select
+                      className="cust-select"
+                      name="garment"
+                      value={form.garment}
+                      onChange={(e) => {
+                        setForm({ ...form, garment: e.target.value, complexity: '', price: 0 });
+                      }}
+                    >
                       <option value="">— Choose Item —</option>
-                      {['Shirt', 'T-Shirt', 'Girls Short Kurti', 'Jeans Short Kurta', 'Handkerchief'].map(g => (
-                        <option key={g} value={g}>{g}</option>
-                      ))}
+                      <option value="Girls Short Kurti">Girls Short Kurti</option>
+                      
+                      <option value="Handkerchief">Handkerchief</option>
                     </select>
                   </div>
 
@@ -703,21 +599,73 @@ export default function Customize() {
                   </div>
                 </div>
 
+                {/* COMPLEXITY */}
+                <div className="cust-group">
+                  <label className="cust-label">Design Complexity *</label>
+                  {!form.garment ? (
+                    <p style={{ fontSize: '12px', color: '#555', letterSpacing: '1px' }}>
+                      Pehle garment select karo
+                    </p>
+                  ) : (
+                    <div>
+                      {complexityOptions.map(opt => (
+                        <div
+                          key={opt.level}
+                          className={`complexity-option ${form.complexity === opt.level ? 'active' : ''}`}
+                          onClick={() => setForm({ ...form, complexity: opt.level, price: opt.price })}
+                        >
+                          <div>
+                            <p style={{
+                              fontSize: '13px',
+                              color: form.complexity === opt.level ? '#C9A84C' : '#F5F0E8',
+                              marginBottom: '4px',
+                              fontFamily: "'Jost', sans-serif",
+                            }}>
+                              {opt.level}
+                            </p>
+                            <p style={{ fontSize: '11px', color: '#666' }}>{opt.desc}</p>
+                          </div>
+                          <div style={{
+                            fontFamily: "'Cormorant Garamond', serif",
+                            fontSize: '22px',
+                            color: '#C9A84C',
+                          }}>
+                            ₹{opt.price}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* SIZE */}
                 <div className="cust-group">
                   <label className="cust-label">Select Size *</label>
                   <div className="size-grid">
-                    {['S', 'M', 'L', 'XL', 'XXL', 'Free Size'].map(s => (
-                      <button
-                        key={s}
-                        className={`size-btn-cust ${form.size === s ? 'active' : ''}`}
-                        onClick={() => setForm({ ...form, size: s })}
-                      >
-                        {s}
-                      </button>
-                    ))}
+                    {form.garment === 'Handkerchief'
+                      ? ['Free Size'].map(s => (
+                          <button
+                            key={s}
+                            className={`size-btn-cust ${form.size === s ? 'active' : ''}`}
+                            onClick={() => setForm({ ...form, size: s })}
+                          >
+                            {s}
+                          </button>
+                        ))
+                      : ['S', 'M', 'L', 'XL', 'XXL', 'Free Size'].map(s => (
+                          <button
+                            key={s}
+                            className={`size-btn-cust ${form.size === s ? 'active' : ''}`}
+                            onClick={() => setForm({ ...form, size: s })}
+                          >
+                            {s}
+                          </button>
+                        ))
+                    }
                   </div>
                 </div>
 
+                {/* COLOR */}
                 <div className="cust-group">
                   <label className="cust-label">Choose Fabric Color</label>
                   <div className="color-grid">
@@ -732,12 +680,8 @@ export default function Customize() {
                           style={{
                             background: c.hex,
                             border: c.hex === '#FFFFFF'
-                              ? form.color === c.hex
-                                ? '2px solid #C9A84C'
-                                : '2px solid #333'
-                              : form.color === c.hex
-                                ? '2px solid #C9A84C'
-                                : '2px solid transparent'
+                              ? form.color === c.hex ? '2px solid #C9A84C' : '2px solid #333'
+                              : form.color === c.hex ? '2px solid #C9A84C' : '2px solid transparent'
                           }}
                         />
                         <span className={`color-name ${form.color === c.hex ? 'active' : ''}`}>
@@ -748,6 +692,7 @@ export default function Customize() {
                   </div>
                 </div>
 
+                {/* CUSTOM TEXT */}
                 <div className="cust-group">
                   <label className="cust-label">Custom Text / Name</label>
                   <input
@@ -759,6 +704,7 @@ export default function Customize() {
                   />
                 </div>
 
+                {/* UPLOAD */}
                 <div className="cust-group">
                   <label className="cust-label">Upload Your Design</label>
                   <div
@@ -782,6 +728,7 @@ export default function Customize() {
                   </div>
                 </div>
 
+                {/* QUANTITY */}
                 <div className="cust-group">
                   <label className="cust-label">Quantity</label>
                   <div className="qty-wrap">
@@ -795,14 +742,26 @@ export default function Customize() {
                       onClick={() => setForm({ ...form, quantity: form.quantity + 1 })}
                     >+</button>
                   </div>
+                  {form.price > 0 && (
+                    <p style={{
+                      fontSize: '13px',
+                      color: '#C9A84C',
+                      marginTop: '12px',
+                      fontFamily: "'Cormorant Garamond', serif",
+                      letterSpacing: '1px'
+                    }}>
+                      Estimated Total: ₹{form.price * form.quantity}
+                    </p>
+                  )}
                 </div>
 
+                {/* NOTES */}
                 <div className="cust-group">
                   <label className="cust-label">Special Instructions</label>
                   <textarea
                     className="cust-textarea"
                     name="notes"
-                    placeholder="Any extra details, color preferences, references, inspirations..."
+                    placeholder="Any extra details, color preferences, references..."
                     value={form.notes}
                     onChange={handleChange}
                   />
@@ -814,7 +773,7 @@ export default function Customize() {
             {step === 2 && (
               <>
                 <h2 className="cust-card-title">Choose <em>Payment</em></h2>
-                <p className="cust-card-sub">Select how you would like to pay for your custom order.</p>
+                <p className="cust-card-sub">Select how you would like to pay for your order.</p>
 
                 {error && <div className="cust-error">⚠ {error}</div>}
 
@@ -823,6 +782,7 @@ export default function Customize() {
                   {[
                     ['Garment', form.garment],
                     ['Size', form.size],
+                    ['Complexity', form.complexity],
                     ['Color', form.color ? '●' : '—'],
                     ['Placement', form.placement || '—'],
                     ['Custom Text', form.customText || '—'],
@@ -839,6 +799,14 @@ export default function Customize() {
                       </span>
                     </div>
                   ))}
+                  {form.price > 0 && (
+                    <div className="summary-row-cust" style={{ marginTop: '8px', borderTop: '1px solid rgba(201,168,76,0.15)', paddingTop: '12px' }}>
+                      <span style={{ color: '#C9A84C', letterSpacing: '1px' }}>Estimated Total</span>
+                      <span style={{ color: '#C9A84C', fontSize: '18px', fontFamily: "'Cormorant Garamond', serif" }}>
+                        ₹{totalPrice}
+                      </span>
+                    </div>
+                  )}
                 </div>
 
                 <div className="cust-group">
@@ -877,6 +845,7 @@ export default function Customize() {
                   <p className="summary-box-title">Final Order Summary</p>
                   {[
                     ['Garment', form.garment],
+                    ['Complexity', form.complexity],
                     ['Size', form.size],
                     ['Quantity', form.quantity],
                     ['Payment', form.paymentMethod === 'cod' ? 'Cash on Delivery' : 'Online Payment'],
@@ -886,6 +855,14 @@ export default function Customize() {
                       <span>{value}</span>
                     </div>
                   ))}
+                  {form.price > 0 && (
+                    <div className="summary-row-cust" style={{ marginTop: '8px', borderTop: '1px solid rgba(201,168,76,0.15)', paddingTop: '12px' }}>
+                      <span style={{ color: '#C9A84C' }}>Total Amount</span>
+                      <span style={{ color: '#C9A84C', fontSize: '18px', fontFamily: "'Cormorant Garamond', serif" }}>
+                        ₹{totalPrice}
+                      </span>
+                    </div>
+                  )}
                 </div>
 
                 <div className="cust-row">
